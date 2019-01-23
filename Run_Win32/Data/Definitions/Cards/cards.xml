@@ -1,0 +1,51 @@
+<CardDefinitions>
+
+    <CardDefinition name="Chillwind Yeti" type="minion" subtype="">
+      <Image file="Chillwind Yeti.png" />
+      <Attributes cost="1" attack="4" health="5" />
+      <Class class="neutral" />
+      <Tags>
+      </Tags>
+      <Text text="" />
+    </CardDefinition>
+
+    <CardDefinition name="Fireball" type="spell" subtype="">
+      <Image file="Fireball.jpg" />
+      <Attributes cost="1" doesTarget="true"/>
+      <Class class="mage" />
+      <Actions>
+        <Action name="damage">
+          <Parameter key="targetId" value=""/>
+          <Parameter key="amount" value="6" />
+        </Action>
+      </Actions>
+      <Tags>
+      </Tags>
+      <Text text="Deal {1} damage.">
+        <Parameter actionName="damage" actionKey="amount" />
+      </Text>
+    </CardDefinition>
+
+    <CardDefinition name="Drain Life" type="spell" subtype="">
+      <Image file="Drain Life.jpg" />
+      <Attributes cost="1" doesTarget="true"/>
+      <Class class="warlock" />      
+      <Actions>        
+        <Action name="damage">
+          <Parameter key="targetId" value=""/>
+          <Parameter key="amount" value="2" />
+        </Action>        
+        <Action name="heal">
+          <Parameter key="targetId" value="2"/>
+          <Parameter key="amount" value="2" />
+        </Action>        
+      </Actions>      
+      <Tags>
+      </Tags>      
+      <Text text="Deal {1} damage. Restore {2} health to your hero.">
+        <Parameter actionName="damage" actionKey="amount" />
+        <Parameter actionName="heal" actionKey="amount" />
+      </Text>      
+    </CardDefinition>
+
+</CardDefinitions>

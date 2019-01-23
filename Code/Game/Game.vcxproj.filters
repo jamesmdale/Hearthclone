@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="General">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main_Win32.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="TheApp.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCommon.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStates\LoadingState.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStates\MainMenuState.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStates\PlayingState.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStates\ReadyState.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStates\GameState.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Board.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity\Player.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity\Card.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity\Minion.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity\Character.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity\Hero.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Definitions\CardDefinition.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Definitions\HeroDefinition.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Definitions\DeckDefinition.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Actions\Action.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Effects\Effect.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Triggers\Trigger.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Actions\ActionList.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Effects\DerivedEffects\DrawEffect.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Effects\DerivedEffects\ReorganizeHandEffect.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Effects\DerivedEffects\ReorganizeMinionsEffect.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="TurnStates\TurnStateManager.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity\EndTurnButton.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Effects\DerivedEffects\TurnChangeEffect.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Effects\DerivedEffects\AttackEffect.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Effects\DerivedEffects\DeathEffect.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Effects\DerivedEffects\AttackTargetEffect.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Effects\DerivedEffects\AbilityTargetEffect.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity\HeroPower.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Effects\DerivedEffects\CastTargetEffect.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Effects\DerivedEffects\DamageEffect.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="Effects\DerivedEffects\VictoryEffect.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="UDPTest.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game.hpp">
+      <Filter>General</Filter>
+    </ClInclude>
+    <ClInclude Include="TheApp.hpp">
+      <Filter>General</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCommon.hpp">
+      <Filter>General</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineBuildPreferences.hpp">
+      <Filter>General</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStates\LoadingState.hpp" />
+    <ClInclude Include="GameStates\MainMenuState.hpp" />
+    <ClInclude Include="GameStates\PlayingState.hpp" />
+    <ClInclude Include="GameStates\ReadyState.hpp" />
+    <ClInclude Include="GameStates\GameState.hpp" />
+    <ClInclude Include="Board.hpp" />
+    <ClInclude Include="Entity\Player.hpp" />
+    <ClInclude Include="Entity\Card.hpp" />
+    <ClInclude Include="Entity\Minion.hpp" />
+    <ClInclude Include="Entity\Character.hpp" />
+    <ClInclude Include="Entity\Hero.hpp" />
+    <ClInclude Include="Definitions\CardDefinition.hpp" />
+    <ClInclude Include="Definitions\HeroDefinition.hpp" />
+    <ClInclude Include="Definitions\DeckDefinition.hpp" />
+    <ClInclude Include="Actions\Action.hpp" />
+    <ClInclude Include="Effects\Effect.hpp" />
+    <ClInclude Include="Triggers\Trigger.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\DrawEffect.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\ReorganizeHandEffect.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\ReorganizeMinionsEffect.hpp" />
+    <ClInclude Include="TurnStates\TurnStateManager.hpp" />
+    <ClInclude Include="Entity\EndTurnButton.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\TurnChangeEffect.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\AttackEffect.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\DeathEffect.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\AttackTargetEffect.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\AbilityTargetEffect.hpp" />
+    <ClInclude Include="Entity\HeroPower.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\CastTargetEffect.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\DamageEffect.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\VictoryEffect.hpp" />
+    <ClInclude Include="UDPTest.hpp" />
+    <ClInclude Include="SessionInfrastructure\NetSession.hpp" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,24 @@
+<HeroDefinitions>
+  <HeroDefinition heroName="Jaina Proudmoore" class="mage">
+    <Power cost="2" name="Fireblast" doesTarget="true">
+      <Action name="damage">
+        <Parameter key="targetId" value=""/>
+        <Parameter key="amount" value="2" />
+      </Action>
+    </Power>
+  </HeroDefinition>
+
+  <HeroDefinition heroName="Gul'dan" class="warlock">
+    <Power cost="2" name="Life Tap" doesTarget="false">
+      <Action name="damage">
+        <Parameter key="targetId" value="self"/>
+        <Parameter key="amount" value="2" />
+      </Action>
+      <Action name="draw">
+        <Parameter key="targetId" value="self"/>
+        <Parameter key="amount" value="1" />
+      </Action>
+    </Power>
+  </HeroDefinition>
+
+</HeroDefinitions>

@@ -1,0 +1,5 @@
+spawn_process 1
+host 10084
+join 192.168.2.106:10084
+join 10.8.133.110:10084
+disconnect

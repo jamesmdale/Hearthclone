@@ -1,0 +1,19 @@
+[X]		Damage Effect
+[ ]		Targeting Line from source
+[X]		Victory
+[ ]		SELF/ENEMY tag correction
+[ ] 	Coin, extra card if going second
+[ ] 	Variety in cards
+[ ]		Text Parsing
+[ ]		Presentation
+
+
+
+[ ] Modifiers
+[ ] Triggers
+[ ] Keyword calculations
+[ ] Deck empty damage
+[ ] Coin implementation
+[ ] Deck creation
+[ ] Game reset on victory
+[ ] Networking
