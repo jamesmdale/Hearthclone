@@ -126,6 +126,9 @@ extern int g_defaultBoardSortLayer;
 extern int g_defaultCardSortLayer;
 extern int g_sortLayerMax;
 
+// default network settings =========================================================================================
+extern int g_defaultPort;
+
 // methods =========================================================================================
 Rgba GetCardColorByClass(eClass cardClass);
 

@@ -4,6 +4,7 @@
 #include "Engine\Net\NetSession.hpp"
 #include "Engine\Camera\Camera.hpp"
 #include "Game\Definitions\CardDefinition.hpp"
+#include "Game\Definitions\DeckDefinition.hpp"
 #include "Game\GameCommon.hpp"
 #include <vector>
 
@@ -35,6 +36,11 @@ public:
 	Clock* m_gameClock = nullptr;
 
 	//game members
+	DeckDefinition* m_loadedDeckDefinition = nullptr;
+	bool m_isHosting = false;
+
+	std::string m_hostAddress = "192.168.2.184";
+	Stopwatch* m_reliableSendTimer = nullptr;
 
 public:
 	Game();
@@ -58,12 +64,17 @@ public:
 
 	void TestReliableSend();
 
-public:
-	//test for reliable send
-	Stopwatch* m_reliableSendTimer = nullptr;
+	//game functions
+	void LoadDefaultDeck();
+	
 };
 
-//command
+//commands
+
+//game commands
+void LoadDeck(Command& cmd);
+
+//net commands
 void UnreliableTest(Command& cmd);
 void ReliableTest(Command& cmd);
 void OutOfOrderTest(Command& cmd);

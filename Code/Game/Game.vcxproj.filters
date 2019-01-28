@@ -28,9 +28,6 @@
     <ClCompile Include="GameStates\PlayingState.cpp">
       <Filter>General</Filter>
     </ClCompile>
-    <ClCompile Include="GameStates\ReadyState.cpp">
-      <Filter>General</Filter>
-    </ClCompile>
     <ClCompile Include="GameStates\GameState.cpp">
       <Filter>General</Filter>
     </ClCompile>
@@ -118,6 +115,9 @@
     <ClCompile Include="UDPTest.cpp">
       <Filter>General</Filter>
     </ClCompile>
+    <ClCompile Include="GameStates\ReadyState.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.hpp">
@@ -135,7 +135,6 @@
     <ClInclude Include="GameStates\LoadingState.hpp" />
     <ClInclude Include="GameStates\MainMenuState.hpp" />
     <ClInclude Include="GameStates\PlayingState.hpp" />
-    <ClInclude Include="GameStates\ReadyState.hpp" />
     <ClInclude Include="GameStates\GameState.hpp" />
     <ClInclude Include="Board.hpp" />
     <ClInclude Include="Entity\Player.hpp" />
@@ -165,5 +164,6 @@
     <ClInclude Include="Effects\DerivedEffects\VictoryEffect.hpp" />
     <ClInclude Include="UDPTest.hpp" />
     <ClInclude Include="SessionInfrastructure\NetSession.hpp" />
+    <ClInclude Include="GameStates\ReadyState.hpp" />
   </ItemGroup>
 </Project>

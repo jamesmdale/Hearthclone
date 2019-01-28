@@ -22,6 +22,9 @@ int g_defaultBoardSortLayer = 0;
 int g_defaultCardSortLayer = 1;
 int g_sortLayerMax = 999;
 
+// default network settings
+int g_defaultPort = 10084;
+
 //  =========================================================================================
 Rgba GetCardColorByClass(eClass cardClass)
 {

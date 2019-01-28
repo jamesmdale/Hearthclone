@@ -11,7 +11,7 @@ enum eGameState
 	NONE_GAME_STATE,
 	LOADING_GAME_STATE,
 	MAIN_MENU_GAME_STATE,	
-	READY_UP_GAME_STATE,
+	READY_GAME_STATE,
 	PLAYING_GAME_STATE,
 	NUM_GAME_STATES
 };
@@ -36,7 +36,7 @@ public:
 	virtual void ResetState();
 	virtual void Initialize();
 
-	bool IsInitialized(){return m_isInitialized;};
+	bool IsInitialized(){return m_isInitialized;}
 
 	//static methods
 	static void UpdateGlobalGameState(float deltaSeconds);
@@ -49,7 +49,7 @@ public:
 	static GameState* GetTransitionGameState();
 
 	//list managers
-	TODO("6/5 - Add better way of managing these. For now, we assume they only have one max of each possibel type");
+	TODO("6/5 - Add better way of managing these. For now, we assume they only have one max of each possible type");
 	static GameState* GetGameStateFromGlobalListByType(eGameState gameStateType);
 	static void AddGameState(GameState* gameState);
 
@@ -57,6 +57,8 @@ public:
 
 private:
 	static void FinishTransition();
+	
+protected:
 	bool m_isInitialized = false;	
 
 public:

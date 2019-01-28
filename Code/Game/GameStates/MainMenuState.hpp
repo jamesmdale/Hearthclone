@@ -4,6 +4,7 @@
 enum eMainMenuOptions
 {
 	PLAY,
+	CONNECT,
 	EXIT,
 	NUM_MAIN_MENU_OPTIONS
 };
@@ -27,8 +28,15 @@ public:
 
 	virtual void ResetState() override;
 
+	void CreateGameAsHost();
+	void ShowInputForJoin();
+	void JoinOnInput();
+	void TransitionToReady();
+
 public:
 	Texture* m_backGroundTexture;
 	eMainMenuOptions m_selectedMenuOption = PLAY;
+	bool m_isAddressInputEnabled = false;
+	std::string m_addressInputText = "";
 };
 

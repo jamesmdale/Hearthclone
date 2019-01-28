@@ -24,6 +24,7 @@
 #include "Game\GameStates\MainMenuState.hpp"
 #include "Game\GameStates\LoadingState.hpp"
 #include "Game\GameStates\PlayingState.hpp"
+#include "Game\GameStates\ReadyState.hpp"
 #include "Engine\Net\NetSession.hpp"
 #include "Engine\Net\NetConnection.hpp"
 #include "Engine\Net\NetMessage.hpp"
@@ -95,6 +96,7 @@ void Game::Initialize()
 	RegisterCommand("net_reliable_test", CommandRegistration(ReliableTest, ": Send X number of reliable tests to connection. (int conIdx, idx count)", ""));
 	RegisterCommand("net_sequence_test", CommandRegistration(ReliableSequenceTest, ": Send X number of reliable tests to connection. (int conIdx, idx count)", ""));
 	RegisterCommand("net_backwards_sequence_test", CommandRegistration(OutOfOrderTest, ": Send X number of backwards reliable tests to connection. (int conIdx, idx count)", ""));
+	RegisterCommand("load_deck", CommandRegistration(LoadDeck, ": Attempt to load a deck from the Decks.xml file (string deckname)", ""));
 
 	//net message registration
 	RegisterGameNetMessages();
@@ -110,6 +112,7 @@ void Game::Initialize()
 	GameState::AddGameState(new MainMenuState(m_gameCamera));
 	GameState::AddGameState(new LoadingState(m_gameCamera));
 	GameState::AddGameState(new PlayingState(m_gameCamera));
+	GameState::AddGameState(new ReadyState(m_gameCamera));
 
 	// set to initial menu
 	GameState::TransitionGameStatesImmediate(GameState::GetGameStateFromGlobalListByType(MAIN_MENU_GAME_STATE));
@@ -122,6 +125,8 @@ void Game::Initialize()
 	CardDefinition::Initialize("Data/Definitions/Cards/cards.xml");
 	HeroDefinition::Initialize("Data/Definitions/Heroes/heroes.xml");
 	DeckDefinition::Initialize("Data/Definitions/Decks/decks.xml");
+
+	LoadDefaultDeck();
 
 	//test reliable send timer init
 	m_reliableSendTimer = new Stopwatch(GetMasterClock());
@@ -228,7 +233,36 @@ void Game::TestReliableSend()
 }
 
 //  =========================================================================================
+void Game::LoadDefaultDeck()
+{
+	if (DeckDefinition::s_deckDefinitions.size() > 0)
+	{
+		m_loadedDeckDefinition = DeckDefinition::s_deckDefinitions.begin()->second;
+	}
+}
+
+//  =========================================================================================
 //  commands =========================================================================================
+//  =========================================================================================
+
+//  =========================================================================================
+void LoadDeck(Command& cmd)
+{
+	std::string deckName = cmd.GetNextString();
+
+	std::map<std::string, DeckDefinition*>::iterator deckDefinitionIterator = DeckDefinition::s_deckDefinitions.find(deckName);
+
+	if (deckDefinitionIterator != DeckDefinition::s_deckDefinitions.end())
+	{
+		g_theGame->m_loadedDeckDefinition = deckDefinitionIterator->second;
+		DevConsolePrintf("Deck '(%s)' successfully loaded!!", deckName.c_str());
+	}	 
+	else
+	{
+		DevConsolePrintf(Rgba::RED, "Deck '(%s)' load unsuccessful!!", deckName.c_str());
+	}
+}
+
 //  =========================================================================================
 void UnreliableTest(Command& cmd)
 {
