@@ -28,6 +28,11 @@ public:
 
 	virtual void ResetState() override;
 
+	void CreateGameAsHost();
+	void ShowInputForJoin();
+	void JoinOnInput();
+	void TransitionToReady();
+
 public:
 	Texture* m_backGroundTexture;
 	eMainMenuOptions m_selectedMenuOption = PLAY;

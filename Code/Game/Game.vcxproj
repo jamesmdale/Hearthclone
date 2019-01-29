@@ -32,7 +32,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Asteroids</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
-    <ProjectName>MichaelCraft</ProjectName>
+    <ProjectName>Hearthclone</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -292,6 +292,23 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Effects\DerivedEffects\DamageEffect.cpp" />
+    <ClCompile Include="Effects\DerivedEffects\CastTargetEffect.cpp" />
+    <ClCompile Include="Effects\DerivedEffects\AbilityTargetEffect.cpp" />
+    <ClCompile Include="Actions\Action.cpp" />
+    <ClCompile Include="Actions\ActionList.cpp" />
+    <ClCompile Include="Effects\DerivedEffects\AttackEffect.cpp" />
+    <ClCompile Include="Effects\DerivedEffects\DeathEffect.cpp" />
+    <ClCompile Include="Effects\DerivedEffects\AttackTargetEffect.cpp" />
+    <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Definitions\DeckDefinition.cpp" />
+    <ClCompile Include="Definitions\CardDefinition.cpp" />
+    <ClCompile Include="Effects\DerivedEffects\DrawEffect.cpp" />
+    <ClCompile Include="Effects\Effect.cpp" />
+    <ClCompile Include="Entity\EndTurnButton.cpp" />
+    <ClCompile Include="Entity\Character.cpp" />
+    <ClCompile Include="Entity\Card.cpp" />
+    <ClCompile Include="Entity\HeroPower.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCommon.cpp" />
     <ClCompile Include="GameStates\LoadingState.cpp" />
@@ -299,10 +316,36 @@
     <ClCompile Include="GameStates\GameState.cpp" />
     <ClCompile Include="GameStates\PlayingState.cpp" />
     <ClCompile Include="GameStates\ReadyState.cpp" />
+    <ClCompile Include="Entity\Hero.cpp" />
+    <ClCompile Include="Definitions\HeroDefinition.cpp" />
     <ClCompile Include="Main_Win32.cpp" />
+    <ClCompile Include="Entity\Player.cpp" />
+    <ClCompile Include="Entity\Minion.cpp" />
+    <ClCompile Include="Effects\DerivedEffects\ReorganizeHandEffect.cpp" />
+    <ClCompile Include="Effects\DerivedEffects\ReorganizeMinionsEffect.cpp" />
     <ClCompile Include="TheApp.cpp" />
+    <ClCompile Include="Triggers\Trigger.cpp" />
+    <ClCompile Include="Effects\DerivedEffects\TurnChangeEffect.cpp" />
+    <ClCompile Include="TurnStates\TurnStateManager.cpp" />
+    <ClCompile Include="Effects\DerivedEffects\VictoryEffect.cpp" />
+    <ClCompile Include="UDPTest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Effects\DerivedEffects\DamageEffect.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\CastTargetEffect.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\AbilityTargetEffect.hpp" />
+    <ClInclude Include="Actions\Action.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\AttackEffect.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\DeathEffect.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\AttackTargetEffect.hpp" />
+    <ClInclude Include="Board.hpp" />
+    <ClInclude Include="Definitions\DeckDefinition.hpp" />
+    <ClInclude Include="Definitions\CardDefinition.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\DrawEffect.hpp" />
+    <ClInclude Include="Effects\Effect.hpp" />
+    <ClInclude Include="Entity\EndTurnButton.hpp" />
+    <ClInclude Include="Entity\Character.hpp" />
+    <ClInclude Include="Entity\Card.hpp" />
     <ClInclude Include="EngineBuildPreferences.hpp" />
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="GameCommon.hpp" />
@@ -311,8 +354,20 @@
     <ClInclude Include="GameStates\GameState.hpp" />
     <ClInclude Include="GameStates\PlayingState.hpp" />
     <ClInclude Include="GameStates\ReadyState.hpp" />
+    <ClInclude Include="Entity\Player.hpp" />
+    <ClInclude Include="Entity\Minion.hpp" />
+    <ClInclude Include="Entity\Hero.hpp" />
+    <ClInclude Include="Definitions\HeroDefinition.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\ReorganizeHandEffect.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\ReorganizeMinionsEffect.hpp" />
+    <ClInclude Include="Entity\HeroPower.hpp" />
     <ClInclude Include="SessionInfrastructure\NetSession.hpp" />
     <ClInclude Include="TheApp.hpp" />
+    <ClInclude Include="Triggers\Trigger.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\TurnChangeEffect.hpp" />
+    <ClInclude Include="TurnStates\TurnStateManager.hpp" />
+    <ClInclude Include="Effects\DerivedEffects\VictoryEffect.hpp" />
+    <ClInclude Include="UDPTest.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Engine\Code\Engine\Engine.vcxproj">
