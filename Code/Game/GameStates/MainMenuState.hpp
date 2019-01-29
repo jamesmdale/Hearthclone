@@ -4,7 +4,8 @@
 enum eMainMenuOptions
 {
 	PLAY,
-	CONNECT,
+	HOST,
+	JOIN,
 	EXIT,
 	NUM_MAIN_MENU_OPTIONS
 };
@@ -32,6 +33,7 @@ public:
 	void ShowInputForJoin();
 	void JoinOnInput();
 	void TransitionToReady();
+	void TransitionToPlaying();
 
 public:
 	Texture* m_backGroundTexture;

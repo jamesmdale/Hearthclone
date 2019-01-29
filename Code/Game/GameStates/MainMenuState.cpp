@@ -2,36 +2,44 @@
 #include "Engine\Window\Window.hpp"
 #include "Engine\Debug\DebugRender.hpp"
 
+//  =========================================================================================
 MainMenuState::~MainMenuState()
 {
 	m_backGroundTexture = nullptr;
 }
 
+//  =========================================================================================
 void MainMenuState::Update(float deltaSeconds)
 {
 	UNUSED(deltaSeconds);
 }
 
+//  =========================================================================================
 void MainMenuState::PreRender()
 {
 }
 
+//  =========================================================================================
 void MainMenuState::Render()
 {
 	Renderer* theRenderer = Renderer::GetInstance();
 	Window* theWindow = Window::GetInstance();
 
 	Rgba playColor = Rgba::GRAY;
+	Rgba hostColor = Rgba::GRAY;
+	Rgba joinColor = Rgba::GRAY;
 	Rgba quitColor = Rgba::GRAY;
-	Rgba connectColor = Rgba::GRAY;
 
 	switch (m_selectedMenuOption)
 	{
 	case PLAY:
 		playColor = Rgba::WHITE;
 		break;
-	case CONNECT:
-		connectColor = Rgba::WHITE;
+	case HOST:
+		hostColor = Rgba::WHITE;
+		break;
+	case JOIN:
+		joinColor = Rgba::WHITE;
 		break;
 	case EXIT:
 		quitColor = Rgba::WHITE;
@@ -49,9 +57,10 @@ void MainMenuState::Render()
 	theRenderer->m_defaultShader->EnableColorBlending(BLEND_OP_ADD, BLEND_SOURCE_ALPHA, BLEND_ONE_MINUS_SOURCE_ALPHA);
 
 	theRenderer->DrawAABB(theWindow->GetClientWindow(), Rgba(0.f, 0.f, 0.f, 1.f));
-	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .5f, theWindow->m_clientHeight * .66666f), "HearthClone", theWindow->m_clientHeight * .1f, Rgba::WHITE, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
-	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .5f, theWindow->m_clientHeight * .35f), "Play", theWindow->m_clientHeight * .075f, playColor, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
-	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .5f, theWindow->m_clientHeight * .25f), "Connect", theWindow->m_clientHeight * .075f, connectColor, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
+	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .5f, theWindow->m_clientHeight * .8f), "HearthClone", theWindow->m_clientHeight * .1f, Rgba::WHITE, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
+	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .5f, theWindow->m_clientHeight * .45f), "Play Solo", theWindow->m_clientHeight * .075f, playColor, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
+	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .5f, theWindow->m_clientHeight * .35f), "Host", theWindow->m_clientHeight * .075f, hostColor, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
+	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .5f, theWindow->m_clientHeight * .25f), "Join", theWindow->m_clientHeight * .075f, joinColor, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
 	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .5f, theWindow->m_clientHeight * .15f), "Quit", theWindow->m_clientHeight * .075f, quitColor, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
 
 	TODO("Add this logic later to allow for joining on separate ips");
@@ -68,6 +77,7 @@ void MainMenuState::Render()
 	theRenderer = nullptr;
 }
 
+//  =========================================================================================
 float MainMenuState::UpdateFromInput(float deltaSeconds)
 {
 	InputSystem* theInput = InputSystem::GetInstance();
@@ -95,15 +105,19 @@ float MainMenuState::UpdateFromInput(float deltaSeconds)
 		m_selectedMenuOption = (eMainMenuOptions)option;
 	}
 
-	if (theInput->WasKeyJustPressed(theInput->KEYBOARD_SPACE))
+	if (theInput->WasKeyJustPressed(theInput->KEYBOARD_ENTER))
 	{
 		switch (m_selectedMenuOption)
 		{
 		case(PLAY):
+			TransitionToPlaying();
+			break;
+		case(HOST):
 			CreateGameAsHost();
 			TransitionToReady();
+			TODO("Display field for input of ip to connect to");
 			break;
-		case(CONNECT):
+		case(JOIN):
 			JoinOnInput();
 			TransitionToReady();
 			TODO("Display field for input of ip to connect to");
@@ -124,33 +138,47 @@ float MainMenuState::UpdateFromInput(float deltaSeconds)
 	return deltaSeconds; //new deltaSeconds
 }
 
+//  =========================================================================================
 void MainMenuState::ResetState()
 {
 	m_selectedMenuOption = PLAY;
 }
 
+//  =========================================================================================
 void MainMenuState::CreateGameAsHost()
 {
 	Game::GetInstance()->m_isHosting = true;
 }
 
+//  =========================================================================================
 void MainMenuState::ShowInputForJoin()
 {
 	TODO("Add input to allow for user to adda custom address to connect to");	
 }
 
+//  =========================================================================================
 void MainMenuState::JoinOnInput()
 {
 	Game::GetInstance()->m_isHosting = false;
 }
 
+//  =========================================================================================
 void MainMenuState::TransitionToReady()
 {
 	ResetState();
 	GameState::TransitionGameStates(GetGameStateFromGlobalListByType(READY_GAME_STATE));
 }
 
+//  =========================================================================================
+void MainMenuState::TransitionToPlaying()
+{
+	ResetState();
+	GameState::TransitionGameStates(GetGameStateFromGlobalListByType(PLAYING_GAME_STATE));
+}
+
+//  =========================================================================================
 void MainMenuState::PostRender()
 {
+
 }
 

@@ -133,8 +133,8 @@ void ReadyState::SetupClient()
 	NetSession* theNetSession = NetSession::GetInstance();
 
 	Command joinCommand = Command("join");
-	joinCommand.AppendString(Game::GetInstance()->m_hostAddress.c_str());
-
+	std::string addressString = Stringf("%s:%s", Game::GetInstance()->m_hostAddress.c_str(), ToString(g_defaultPort).c_str());
+	joinCommand.AppendString(addressString.c_str());
 	CommandRun(joinCommand);
 }
 

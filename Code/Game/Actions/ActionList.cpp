@@ -251,11 +251,6 @@ void CastSpellFromHandAction(const std::map<std::string, std::string>& parameter
 	{
 		//trigger right click
 		cardToCast->OnRightClicked();
-
-		//cleanup and return
-		gameState = nullptr;
-		playerCasting = nullptr;
-		cardToCast = nullptr;
 		return;
 	}
 
@@ -277,10 +272,6 @@ void CastSpellFromHandAction(const std::map<std::string, std::string>& parameter
 		ActionData data = ActionData("cast", parameters);
 		AddActionToRefereeQueue(data);
 	}
-
-	cardToCast = nullptr;
-	playerCasting = nullptr;
-	gameState = nullptr;
 }
 
 void CastAction(const std::map<std::string, std::string>& parameters)
