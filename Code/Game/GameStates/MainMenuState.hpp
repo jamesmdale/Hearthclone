@@ -38,7 +38,5 @@ public:
 public:
 	Texture* m_backGroundTexture;
 	eMainMenuOptions m_selectedMenuOption = PLAY;
-	bool m_isAddressInputEnabled = false;
-	std::string m_addressInputText = "";
 };
 

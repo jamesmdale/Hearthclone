@@ -154,11 +154,6 @@ float TheApp::UpdateInput(float deltaSeconds)
 		Game::GetInstance()->UpdateInput(deltaSeconds);
 	}
 
-	if(InputSystem::GetInstance()->WasKeyJustPressed(InputSystem::GetInstance()->KEYBOARD_ESCAPE))
-	{
-		g_isQuitting = true;
-	}
-
 	return deltaSeconds;
 }
 

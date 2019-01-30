@@ -96,7 +96,10 @@ void Game::Initialize()
 	RegisterCommand("net_reliable_test", CommandRegistration(ReliableTest, ": Send X number of reliable tests to connection. (int conIdx, idx count)", ""));
 	RegisterCommand("net_sequence_test", CommandRegistration(ReliableSequenceTest, ": Send X number of reliable tests to connection. (int conIdx, idx count)", ""));
 	RegisterCommand("net_backwards_sequence_test", CommandRegistration(OutOfOrderTest, ": Send X number of backwards reliable tests to connection. (int conIdx, idx count)", ""));
+
+	//game commands
 	RegisterCommand("load_deck", CommandRegistration(LoadDeck, ": Attempt to load a deck from the Decks.xml file (string deckname)", ""));
+	RegisterCommand("change_host", CommandRegistration(ChangeHost, ": change the intended host to join (string ip address)", ""));
 
 	//net message registration
 	RegisterGameNetMessages();
@@ -127,6 +130,7 @@ void Game::Initialize()
 	DeckDefinition::Initialize("Data/Definitions/Decks/decks.xml");
 
 	LoadDefaultDeck();
+	NetSession::GetInstance()->m_
 
 	//test reliable send timer init
 	m_reliableSendTimer = new Stopwatch(GetMasterClock());
@@ -260,6 +264,22 @@ void LoadDeck(Command& cmd)
 	else
 	{
 		DevConsolePrintf(Rgba::RED, "Deck '(%s)' load unsuccessful!!", deckName.c_str());
+	}
+}
+
+//  =============================================================================
+void ChangeHost(Command & cmd)
+{
+	std::string address = cmd.GetNextString();
+	
+	if (IsStringNullOrEmpty(address))
+	{
+		DevConsolePrintf(Rgba::RED, "Address is invalid");
+	}		
+	else
+	{
+		Game::GetInstance()->m_hostAddress = address;
+		DevConsolePrintf("Changed intended host address");
 	}
 }
 

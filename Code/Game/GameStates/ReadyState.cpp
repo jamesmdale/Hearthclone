@@ -84,15 +84,15 @@ float ReadyState::UpdateFromInput(float deltaSeconds)
 {
 	InputSystem* theInput = InputSystem::GetInstance();
 
-	if (theInput->WasKeyJustPressed(theInput->KEYBOARD_SPACE))
-	{
-		switch (m_selectedMenuOption)
-		{
-			case(BACK_TO_MAIN_READY_STATE):
-				ResetState();
-				TransitionGameStatesImmediate(GetGameStateFromGlobalListByType(MAIN_MENU_GAME_STATE));
-		}
-	}
+	//if (theInput->WasKeyJustPressed(theInput->KEYBOARD_ENTER))
+	//{
+	//	switch (m_selectedMenuOption)
+	//	{
+	//		case(BACK_TO_MAIN_READY_STATE):
+	//			ResetState();
+	//			TransitionGameStatesImmediate(GetGameStateFromGlobalListByType(MAIN_MENU_GAME_STATE));
+	//	}
+	//}
 
 	if (theInput->WasKeyJustPressed(theInput->KEYBOARD_ESCAPE))
 	{

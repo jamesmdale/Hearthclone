@@ -63,6 +63,33 @@ void MainMenuState::Render()
 	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .5f, theWindow->m_clientHeight * .25f), "Join", theWindow->m_clientHeight * .075f, joinColor, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
 	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .5f, theWindow->m_clientHeight * .15f), "Quit", theWindow->m_clientHeight * .075f, quitColor, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
 
+
+	//info text
+	std::string deckText = "Loaded Deck: ";
+	if (Game::GetInstance()->m_loadedDeckDefinition != nullptr)
+	{
+		deckText = Stringf("%s%s", deckText, Game::GetInstance()->m_loadedDeckDefinition->m_deckName.c_str());
+	}
+	else
+	{
+		deckText = Stringf("%s%s", deckText, "NO DECK LOADED!");
+	}
+
+	std::string ipText = "Saved Join IP: ";
+	if (!IsStringNullOrEmpty(Game::GetInstance()->m_hostAddress))
+	{
+		deckText = Stringf("%s%s", deckText, Game::GetInstance()->m_hostAddress);
+	}
+	else
+	{
+		deckText = Stringf("%s%s", deckText, "NO JOIN IP SET!");
+	}
+
+	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .8f, theWindow->m_clientHeight * .8f), deckText.c_str(), theWindow->m_clientHeight * .025f, Rgba::YELLOW, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
+	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .8f, theWindow->m_clientHeight * .7f), ipText.c_str(), theWindow->m_clientHeight * .025f, Rgba::YELLOW, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
+
+
+
 	TODO("Add this logic later to allow for joining on separate ips");
 	//if (m_isAddressInputEnabled)
 	//{
@@ -81,7 +108,6 @@ void MainMenuState::Render()
 float MainMenuState::UpdateFromInput(float deltaSeconds)
 {
 	InputSystem* theInput = InputSystem::GetInstance();
-
 
 	if (theInput->WasKeyJustPressed(theInput->KEYBOARD_W) || theInput->WasKeyJustPressed(theInput->KEYBOARD_UP_ARROW))
 	{
@@ -118,7 +144,7 @@ float MainMenuState::UpdateFromInput(float deltaSeconds)
 			TODO("Display field for input of ip to connect to");
 			break;
 		case(JOIN):
-			JoinOnInput();
+			JoinOnInput();		
 			TransitionToReady();
 			TODO("Display field for input of ip to connect to");
 			break;
@@ -132,7 +158,7 @@ float MainMenuState::UpdateFromInput(float deltaSeconds)
 	{
 		g_isQuitting = true;
 	}
-
+	
 	theInput = nullptr;
 	delete(theInput);
 	return deltaSeconds; //new deltaSeconds

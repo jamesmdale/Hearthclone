@@ -39,7 +39,7 @@ public:
 	DeckDefinition* m_loadedDeckDefinition = nullptr;
 	bool m_isHosting = false;
 
-	std::string m_hostAddress = "192.168.2.184";
+	std::string m_hostAddress = "";
 	Stopwatch* m_reliableSendTimer = nullptr;
 
 public:
@@ -69,10 +69,9 @@ public:
 	
 };
 
-//commands
-
 //game commands
 void LoadDeck(Command& cmd);
+void ChangeHost(Command& cmd);
 
 //net commands
 void UnreliableTest(Command& cmd);

@@ -292,6 +292,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DialogBox.cpp" />
     <ClCompile Include="Effects\DerivedEffects\DamageEffect.cpp" />
     <ClCompile Include="Effects\DerivedEffects\CastTargetEffect.cpp" />
     <ClCompile Include="Effects\DerivedEffects\AbilityTargetEffect.cpp" />
@@ -331,6 +332,7 @@
     <ClCompile Include="UDPTest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DialogBox.hpp" />
     <ClInclude Include="Effects\DerivedEffects\DamageEffect.hpp" />
     <ClInclude Include="Effects\DerivedEffects\CastTargetEffect.hpp" />
     <ClInclude Include="Effects\DerivedEffects\AbilityTargetEffect.hpp" />
