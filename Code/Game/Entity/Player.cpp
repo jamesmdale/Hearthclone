@@ -154,7 +154,6 @@ void Player::ShuffleDeck()
 	}	
 }
 
-
 //  =========================================================================================
 void Player::UpdateHandLockPositions()
 {

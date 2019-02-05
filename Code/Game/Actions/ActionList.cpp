@@ -127,8 +127,7 @@ void AttackAction(const std::map<std::string, std::string>& parameters)
 	AttackEffect* effect = new AttackEffect(attackingCharacter, 0.5f, attackingCharacter->m_lockPosition, targetCharacter->m_lockPosition);
 	AddEffectToEffectQueue(effect);
 
-	TODO("damage queue");
-	 
+	TODO("damage queue");	 
 	TODO("Damage triggers");
 	TODO("Death triggers");
 	TODO("Attack Effect");

@@ -11,8 +11,9 @@
 std::map<std::string, ActionCallback> s_registeredActions;
 std::queue<ActionData> RefereeQueue;
 
+//  =========================================================================================
 // general functions =============================================================================
-
+//  =========================================================================================
 void RegisterAllActions()
 {
 	RegisterAction("draw", DrawAction);
@@ -27,11 +28,13 @@ void RegisterAllActions()
 	RegisterAction("cast", CastAction);
 }
 
+//  =========================================================================================
 void RegisterAction(std::string name, ActionCallback action)
 {
 	s_registeredActions.emplace(name, action);
 }
 
+//  =========================================================================================
 std::vector<std::string> GetRegisteredActionList()
 {
 	std::vector<std::string> registeredActionNames;
@@ -44,6 +47,7 @@ std::vector<std::string> GetRegisteredActionList()
 	return registeredActionNames;
 }
 
+//  =========================================================================================
 ActionCallback GetActionDataFromRegisteredListByName(const std::string & actionName)
 {
 	std::map<std::string, ActionCallback>::iterator iterator = s_registeredActions.find(actionName);
@@ -54,8 +58,9 @@ ActionCallback GetActionDataFromRegisteredListByName(const std::string & actionN
 	return iterator->second;
 }
 
+//  =========================================================================================
 // RefereeQueue methods =========================================================================================
-
+//  =========================================================================================
 void ProcessRefereeQueue()
 {	
 	//if effects are still running, don't add anything new to the RefereeQueue queue
@@ -71,16 +76,19 @@ void ProcessRefereeQueue()
 	}	
 }
 
+//  =========================================================================================
 int GetRefereeQueueCount()
 {
 	return (int)RefereeQueue.size();
 }
 
+//  =========================================================================================
 void AddActionToRefereeQueue(ActionData action)
 {
 	RefereeQueue.push(action);
 }
 
+//  =========================================================================================
 void AddActionToRefereeQueue(const std::string& callbackName, const std::map<std::string, std::string> parameters)
 {
 	AddActionToRefereeQueue(ActionData(callbackName, parameters));

@@ -106,6 +106,17 @@ float ReadyState::UpdateFromInput(float deltaSeconds)
 }
 
 //  =========================================================================================
+void ReadyState::TransitionOut(float secondsTransitioning)
+{
+	UNUSED(secondsTransitioning);
+	/*	does whatever it wants in terms of transitioning. when finished,
+	set s_isFinishedTransitioningOut to true
+	*/
+	SetFinishedTransitioningOut(true);
+	ResetState();
+}
+
+//  =========================================================================================
 void ReadyState::ResetState()
 {
 	//we need to reinitialize when we move to the ready state next time
@@ -148,9 +159,10 @@ void ReadyState::UpdateHosting()
 	{
 		for (int connectionIndex = 0; connectionIndex < MAX_NUM_NET_CONNECTIONS; ++connectionIndex)
 		{
+			TODO("need a bool confirming everyone is correctly loaded");
 			if (theNetSession->m_boundConnections[connectionIndex]->IsClient() && theNetSession->m_boundConnections[connectionIndex]->IsReady())
 			{
-				ResetState();
+				TODO("initialize playing state with correct data");
 				GameState::TransitionGameStates(GetGameStateFromGlobalListByType(PLAYING_GAME_STATE));
 			}			
 		}
@@ -162,9 +174,10 @@ void ReadyState::UpdateJoining()
 {
 	NetSession* theNetSession = NetSession::GetInstance();
 
-	if (theNetSession->m_hostConnection->IsReady() && theNetSession->m_myConnection->IsReady())
+	TODO("need a bool confirming everyone is correctly loaded");
+	if (theNetSession->m_hostConnection->IsReady() && theNetSession->m_myConnection->IsReady())  
 	{
-		ResetState();
+		TODO("initialize playing state with correct data");
 		GameState::TransitionGameStates(GetGameStateFromGlobalListByType(PLAYING_GAME_STATE));
 	}
 }
@@ -188,8 +201,11 @@ std::string ReadyState::GetConnectionStateAsText()
 		stateAsText = "Joining opponent...";
 	}
 
-	int secondsConnecting = (int)m_connectionTimer->GetElapsedTimeInSeconds();
-	Stringf("%s    (%is)", stateAsText, secondsConnecting);
+	if (m_connectionTimer != nullptr)
+	{
+		int secondsConnecting = (int)m_connectionTimer->GetElapsedTimeInSeconds();
+		Stringf("%s    (%is)", stateAsText, secondsConnecting);
+	}	
 
 	return stateAsText;
 }

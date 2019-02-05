@@ -52,15 +52,14 @@ public:
 
 	void Update(); //use internal clock for delta seconds;
 
-	void UpdateJoinState();
-
 	void PreRender();
 	void Render();
 	void PostRender();
 
-	void RegisterGameNetMessages();
-
 	float UpdateInput(float deltaSeconds);
+
+	//network
+	void RegisterGameNetMessages();	
 
 	void TestReliableSend();
 

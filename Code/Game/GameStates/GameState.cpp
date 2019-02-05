@@ -75,7 +75,7 @@ void GameState::TransitionIn(float secondsTransitioning)
 	/*	does whatever it wants in terms of transitioning. when finished,
 	set s_isFinishedTransitioningIn to true
 	*/
-	s_isFinishedTransitioningIn = true;
+	SetFinishedTransitioningIn(true);
 }
 
 void GameState::TransitionOut(float secondsTransitioning)
@@ -84,7 +84,7 @@ void GameState::TransitionOut(float secondsTransitioning)
 	/*	does whatever it wants in terms of transitioning. when finished,
 		set s_isFinishedTransitioningOut to true
 	*/
-	s_isFinishedTransitioningOut = true;
+	SetFinishedTransitioningOut(true);
 }
 
 void GameState::ResetState()
@@ -190,9 +190,22 @@ void GameState::AddGameState(GameState* gameState)
 	s_gameStates.push_back(gameState);
 }
 
+//  =========================================================================================
 float GameState::GetSecondsInCurrentState()
 {
 	return s_secondsInState;
+}
+
+//  =========================================================================================
+void GameState::SetFinishedTransitioningOut(bool isFinished)
+{
+	s_isFinishedTransitioningOut = isFinished;
+}
+
+//  =========================================================================================
+void GameState::SetFinishedTransitioningIn(bool isFinished)
+{
+	s_isFinishedTransitioningIn = isFinished;
 }
 
 

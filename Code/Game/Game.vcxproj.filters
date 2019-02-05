@@ -118,9 +118,6 @@
     <ClCompile Include="GameStates\ReadyState.cpp">
       <Filter>General</Filter>
     </ClCompile>
-    <ClCompile Include="DialogBox.cpp">
-      <Filter>General</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.hpp">
@@ -168,6 +165,5 @@
     <ClInclude Include="UDPTest.hpp" />
     <ClInclude Include="SessionInfrastructure\NetSession.hpp" />
     <ClInclude Include="GameStates\ReadyState.hpp" />
-    <ClInclude Include="DialogBox.hpp" />
   </ItemGroup>
 </Project>

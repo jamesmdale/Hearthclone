@@ -130,7 +130,7 @@ void Game::Initialize()
 	DeckDefinition::Initialize("Data/Definitions/Decks/decks.xml");
 
 	LoadDefaultDeck();
-	NetSession::GetInstance()->m_
+	//NetSession::GetInstance()->m_
 
 	//test reliable send timer init
 	m_reliableSendTimer = new Stopwatch(GetMasterClock());
@@ -153,24 +153,6 @@ void Game::Update()
 
 	//test case for reliable sends
 	//TestReliableSend();
-}
-
-//  =============================================================================
-void Game::UpdateJoinState()
-{
-	//if (NetSession::GetInstance()->IsJoined())
-	//{
-	//	//SetGameState(GAME_STATE_CHARACTER_SELECT)
-	//}
-	//else if (NetSession::GetInstance()->IsDisconnected())
-	//{
-	//	std::string errorString;
-	//	eNetSessionError error = NetSession::GetInstance()->GetLastError( &errorString );
-
-	//	//do something
-	//	//Popup( "Failed to jion", errorString.c_str());
-	//	//SetGameState(GAME_STATE_MAIN_MENU)
-	//}
 }
 
 //  =========================================================================================

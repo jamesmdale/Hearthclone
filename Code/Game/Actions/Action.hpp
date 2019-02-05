@@ -49,8 +49,6 @@ int GetRefereeQueueCount();
 void AddActionToRefereeQueue(ActionData action);
 void AddActionToRefereeQueue(const std::string& callbackName, const std::map<std::string, std::string> parameters);
 
-
-
 //EXAMPLE
 /*	TEMPLATE
 	void DoStuff(const std::map<std::string, std::string>& parameters)

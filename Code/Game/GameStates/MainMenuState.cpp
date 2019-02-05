@@ -63,32 +63,29 @@ void MainMenuState::Render()
 	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .5f, theWindow->m_clientHeight * .25f), "Join", theWindow->m_clientHeight * .075f, joinColor, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
 	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .5f, theWindow->m_clientHeight * .15f), "Quit", theWindow->m_clientHeight * .075f, quitColor, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
 
-
 	//info text
 	std::string deckText = "Loaded Deck: ";
 	if (Game::GetInstance()->m_loadedDeckDefinition != nullptr)
 	{
-		deckText = Stringf("%s%s", deckText, Game::GetInstance()->m_loadedDeckDefinition->m_deckName.c_str());
+		deckText = Stringf("%s%s", deckText.c_str(), Game::GetInstance()->m_loadedDeckDefinition->m_deckName.c_str());
 	}
 	else
 	{
-		deckText = Stringf("%s%s", deckText, "NO DECK LOADED!");
+		deckText = Stringf("%s%s", deckText.c_str(), "NO DECK LOADED!");
 	}
 
 	std::string ipText = "Saved Join IP: ";
 	if (!IsStringNullOrEmpty(Game::GetInstance()->m_hostAddress))
 	{
-		deckText = Stringf("%s%s", deckText, Game::GetInstance()->m_hostAddress);
+		ipText = Stringf("%s%s", ipText.c_str(), Game::GetInstance()->m_hostAddress.c_str());
 	}
 	else
 	{
-		deckText = Stringf("%s%s", deckText, "NO JOIN IP SET!");
+		ipText = Stringf("%s%s", ipText.c_str(), "NO JOIN IP SET!");
 	}
 
-	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .8f, theWindow->m_clientHeight * .8f), deckText.c_str(), theWindow->m_clientHeight * .025f, Rgba::YELLOW, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
-	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .8f, theWindow->m_clientHeight * .7f), ipText.c_str(), theWindow->m_clientHeight * .025f, Rgba::YELLOW, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
-
-
+	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .8f, theWindow->m_clientHeight * .2f), deckText.c_str(), theWindow->m_clientHeight * .015f, Rgba::YELLOW, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
+	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .8f, theWindow->m_clientHeight * .15f), ipText.c_str(), theWindow->m_clientHeight * .015, Rgba::YELLOW, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
 
 	TODO("Add this logic later to allow for joining on separate ips");
 	//if (m_isAddressInputEnabled)

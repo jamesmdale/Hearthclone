@@ -55,6 +55,10 @@ public:
 
 	static float GetSecondsInCurrentState();
 
+protected:
+	void SetFinishedTransitioningOut(bool isFinished);
+	void SetFinishedTransitioningIn(bool isFinished);
+
 private:
 	static void FinishTransition();
 	

@@ -27,6 +27,7 @@ public:
 	virtual void PostRender() override;
 	virtual float UpdateFromInput(float deltaSeconds) override;
 
+	virtual void TransitionOut(float secondsTransitioning) override;
 	virtual void ResetState() override;
 
 	//net functions
