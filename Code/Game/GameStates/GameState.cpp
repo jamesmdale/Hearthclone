@@ -10,6 +10,7 @@ bool GameState::s_isFinishedTransitioningOut = true;
 bool GameState::s_isFinishedTransitioningIn = true;
 std::vector<GameState*> GameState::s_gameStates;
 
+//  =========================================================================================
 GameState::GameState(Camera* camera)
 {
 	m_camera = camera;
@@ -18,6 +19,7 @@ GameState::GameState(Camera* camera)
 	m_renderScene2D->AddCamera(m_camera);
 }
 
+//  =========================================================================================
 GameState::~GameState()
 {	
 	delete(m_renderScene2D);
@@ -33,16 +35,25 @@ GameState::~GameState()
 	s_gameStates.clear();
 }
 
+//  =========================================================================================
+void GameState::OnConstructionSetup()
+{
+	//unused for now
+}
+
+//  =========================================================================================
 void GameState::Update(float deltaSeconds)
 {
 	UNUSED(deltaSeconds);
 }
 
+//  =========================================================================================
 void GameState::PreRender()
 {
 	//prerender tasks here
 }
 
+//  =========================================================================================
 void GameState::Render()
 {
 	Renderer* theRenderer = Renderer::GetInstance();
@@ -58,17 +69,19 @@ void GameState::Render()
 	theRenderer = nullptr;
 }
 
+//  =========================================================================================
 void GameState::PostRender()
 {
 	//postrender tasks here
 }
 
-
+//  =========================================================================================
 float GameState::UpdateFromInput(float deltaSeconds)
 {
 	return deltaSeconds;
 }
 
+//  =========================================================================================
 void GameState::TransitionIn(float secondsTransitioning)
 {
 	UNUSED(secondsTransitioning);
@@ -78,6 +91,7 @@ void GameState::TransitionIn(float secondsTransitioning)
 	SetFinishedTransitioningIn(true);
 }
 
+//  =========================================================================================
 void GameState::TransitionOut(float secondsTransitioning)
 {
 	UNUSED(secondsTransitioning);
@@ -87,11 +101,13 @@ void GameState::TransitionOut(float secondsTransitioning)
 	SetFinishedTransitioningOut(true);
 }
 
+//  =========================================================================================
 void GameState::ResetState()
 {
 	//reset menu options or game states here
 }
 
+//  =========================================================================================
 void GameState::Initialize()
 {
 	//run initialization tasks here
@@ -99,7 +115,7 @@ void GameState::Initialize()
 }
 
 //static methods
-
+//  =========================================================================================
 void GameState::UpdateGlobalGameState(float deltaSeconds)
 {	
 	s_secondsInState += deltaSeconds;
@@ -127,6 +143,7 @@ void GameState::UpdateGlobalGameState(float deltaSeconds)
 	
 }
 
+//  =========================================================================================
 void GameState::FinishTransition()
 {
 	g_currentState = g_transitionState;
@@ -142,6 +159,7 @@ void GameState::FinishTransition()
 	}	
 }
 
+//  =========================================================================================
 void GameState::TransitionGameStates(GameState* toState)
 {
 	GUARANTEE_OR_DIE(toState != nullptr, "INVALID MENU STATE TRANSITION");
@@ -151,6 +169,7 @@ void GameState::TransitionGameStates(GameState* toState)
 	s_isFinishedTransitioningIn = false;
 }
 
+//  =========================================================================================
 void GameState::TransitionGameStatesImmediate( GameState* toState)
 {
 	GUARANTEE_OR_DIE(toState != nullptr, "INVALID MENU STATE TRANSITION");
@@ -160,17 +179,19 @@ void GameState::TransitionGameStatesImmediate( GameState* toState)
 	s_isFinishedTransitioningIn = true;
 }
 
+//  =========================================================================================
 GameState* GameState::GetCurrentGameState()
 {
 	return g_currentState;
 }
 
+//  =========================================================================================
 GameState* GameState::GetTransitionGameState()
 {
 	return g_transitionState;
 }
 
-//For now, we assume they will only ever have one of each possible type in the list
+//For now, we assume they will only ever have one of each possible type in the list  =========================================================================================
 GameState* GameState::GetGameStateFromGlobalListByType(eGameState gameStateType)
 {
 	for (int gameStateIndex = 0; gameStateIndex < (int)s_gameStates.size(); gameStateIndex++)
@@ -184,7 +205,7 @@ GameState* GameState::GetGameStateFromGlobalListByType(eGameState gameStateType)
 	return nullptr;
 }
 
-//For now, we assume they will only ever have one of each possible type in the list
+//For now, we assume they will only ever have one of each possible type in the list  =========================================================================================
 void GameState::AddGameState(GameState* gameState)
 {
 	s_gameStates.push_back(gameState);

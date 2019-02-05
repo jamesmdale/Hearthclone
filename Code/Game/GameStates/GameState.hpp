@@ -23,6 +23,7 @@ public:
 
 	virtual ~GameState();	
 
+	virtual void OnConstructionSetup();
 	virtual void Update(float deltaSeconds);
 	virtual void PreRender();
 	virtual void Render();

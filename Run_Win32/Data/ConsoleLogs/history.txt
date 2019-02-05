@@ -1,8 +1,8 @@
 change_host 192.168.2.106
-change_host 10.8.139.103
+change_host 10.8.143.230
 load_deck "All_Yetis"
 spawn_process 1
 host 10084
 join 192.168.2.106:10084
-join 10.8.133.110:10084
+join 10.8.143.230:10084
 disconnect

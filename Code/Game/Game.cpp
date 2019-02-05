@@ -182,8 +182,6 @@ void Game::RegisterGameNetMessages()
 	theNetSession->RegisterMessageDefinition(RELIABLE_TEST_GAME_NET_MESSAGE_TYPE, "net_reliable_test", OnReliableTest, RELIABLE_NET_MESSAGE_FLAG);
 	theNetSession->RegisterMessageDefinition(SEQUENCE_TEST_GAME_NET_MESSAGE_TYPE, "net_sequence_test", OnSequenceTest, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
 	theNetSession->RegisterMessageDefinition("test", OnTest);
-
-	theNetSession = nullptr;
 }
 
 //  =========================================================================================

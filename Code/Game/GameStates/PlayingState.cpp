@@ -1,20 +1,21 @@
 #include "Game\GameStates\PlayingState.hpp"
-#include "Engine\Window\Window.hpp"
-#include "Engine\Debug\DebugRender.hpp"
-#include "Engine\Core\LightObject.hpp"
-#include "Engine\Renderer\MeshBuilder.hpp"
-#include "Engine\Debug\DebugRender.hpp"
 #include "Game\Entity\Card.hpp"
 #include "Game\Actions\Action.hpp"
 #include "Game\Effects\Effect.hpp"
-#include <map>
-#include <string>
-#include "Engine\Core\StringUtils.hpp"
 #include "Game\Entity\Player.hpp"
 #include "Game\Entity\Minion.hpp"
 #include "Game\TurnStates\TurnStateManager.hpp"
 #include "Game\Board.hpp"
 #include "Game\Entity\Hero.hpp"
+#include "Game\NetGame\GameNetMessages.hpp"
+#include "Engine\Window\Window.hpp"
+#include "Engine\Debug\DebugRender.hpp"
+#include "Engine\Core\LightObject.hpp"
+#include "Engine\Renderer\MeshBuilder.hpp"
+#include "Engine\Debug\DebugRender.hpp"
+#include "Engine\Core\StringUtils.hpp"
+#include <map>
+#include <string>
 
 //  =============================================================================
 PlayingState::~PlayingState()
@@ -37,6 +38,12 @@ PlayingState::~PlayingState()
 	//delete scene last
 	delete(m_renderScene2D);
 	m_renderScene2D = nullptr;		
+}
+
+//  =========================================================================================
+void PlayingState::OnConstructionSetup()
+{
+	RegisterNetMessages();
 }
 
 //  =============================================================================
@@ -305,6 +312,14 @@ Character* PlayingState::GetCharacterById(int characterId)
 
 	//if we didn't find the character return nullptr
 	return nullptr;
+}
+
+//  =========================================================================================
+void PlayingState::RegisterNetMessages()
+{
+	NetSession* theNetSession = NetSession::GetInstance();
+
+	theNetSession->RegisterMessageDefinition(PLAYING_STATE_READY_NGM, "playing_state_ready", OnPlayingStateReady);
 }
 
 

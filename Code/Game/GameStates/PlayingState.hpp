@@ -1,8 +1,8 @@
 #pragma once
 #include "Game\GameStates\GameState.hpp"
+#include "Game\Entity\Character.hpp"
 #include "Engine\Time\Stopwatch.hpp"
 #include "Engine\Core\Widget.hpp"
-#include "Game\Entity\Character.hpp"
 
 class Board;
 class TurnStateManager;
@@ -14,10 +14,13 @@ public:
 	PlayingState(Camera* camera) : GameState(camera)
 	{
 		m_type = PLAYING_GAME_STATE;
+		OnConstructionSetup();
 	}
 
 	virtual ~PlayingState() override;
 	
+	//inherited
+	virtual void OnConstructionSetup() override;
 	virtual void Initialize() override;
 	virtual void Update(float deltaSeconds) override;
 	virtual void PreRender() override;
@@ -25,6 +28,7 @@ public:
 	virtual void PostRender() override;
 	virtual float UpdateFromInput(float deltaSeconds) override;
 
+	//playing state specific methods
 	bool GetInteractableWidgets(std::vector<Widget*>& outWidgets);
 	Widget* GetSelectedWidget(const std::vector<Widget*>& widgets);
 
@@ -32,6 +36,7 @@ public:
 	Character* GetSelectedCharacter(const std::vector<Character*>& widgets);
 
 	Character* GetCharacterById(int characterId);
+	void RegisterNetMessages();
 
 public:
 	Board* m_gameBoard = nullptr;
@@ -50,6 +55,5 @@ public:
 	int m_turnCount;
 
 	//MatchLog
-
 };
 

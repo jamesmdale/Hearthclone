@@ -174,6 +174,8 @@ void ReadyState::UpdateJoining()
 {
 	NetSession* theNetSession = NetSession::GetInstance();
 
+	//need a message tell them to transition states.
+
 	TODO("need a bool confirming everyone is correctly loaded");
 	if (theNetSession->m_hostConnection->IsReady() && theNetSession->m_myConnection->IsReady())  
 	{
