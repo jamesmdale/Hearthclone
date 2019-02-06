@@ -1,4 +1,5 @@
 #include "Game\GameStates\ReadyState.hpp"
+#include "Game\NetGame\GameNetMessages.hpp"
 #include "Engine\Window\Window.hpp"
 #include "Engine\Net\NetSession.hpp"
 #include "Engine\Core\Command.hpp"
@@ -18,6 +19,7 @@ void ReadyState::Initialize()
 {
 	m_connectionTimer = new Stopwatch();
 	m_connectionTimer->SetClock(GetMasterClock());
+	m_connectionTimer->SetTimer(0.5f);
 
 	if (Game::GetInstance()->m_isHosting)
 	{
@@ -84,16 +86,6 @@ float ReadyState::UpdateFromInput(float deltaSeconds)
 {
 	InputSystem* theInput = InputSystem::GetInstance();
 
-	//if (theInput->WasKeyJustPressed(theInput->KEYBOARD_ENTER))
-	//{
-	//	switch (m_selectedMenuOption)
-	//	{
-	//		case(BACK_TO_MAIN_READY_STATE):
-	//			ResetState();
-	//			TransitionGameStatesImmediate(GetGameStateFromGlobalListByType(MAIN_MENU_GAME_STATE));
-	//	}
-	//}
-
 	if (theInput->WasKeyJustPressed(theInput->KEYBOARD_ESCAPE))
 	{
 		ResetState();
@@ -128,6 +120,32 @@ void ReadyState::ResetState()
 }
 
 //  =========================================================================================
+bool ReadyState::IsMatchSetupComplete()
+{
+	Game* theGame = Game::GetInstance();
+	NetSession* theNetSession = NetSession::GetInstance();
+
+	//if we have a client bound
+	if (theNetSession->GetNumBoundConnections() > 1)
+	{
+		for (int connectionIndex = 0; connectionIndex < MAX_NUM_NET_CONNECTIONS; ++connectionIndex)
+		{
+			TODO("need a bool confirming everyone is correctly loaded");
+			if (theNetSession->m_boundConnections[connectionIndex]->IsClient() &&
+				theNetSession->m_boundConnections[connectionIndex]->IsReady() &&
+				theGame->m_enemyLoadedDeckDefinition != nullptr &&
+				theGame->m_playerLoadedDeckDefinition != nullptr)
+			{
+				return true;
+			}
+		}
+	}
+
+	//else
+	return false;
+}
+
+//  =========================================================================================
 void ReadyState::SetupHost()
 {
 	NetSession* theNetSession = NetSession::GetInstance();
@@ -152,35 +170,24 @@ void ReadyState::SetupClient()
 //  =========================================================================================
 void ReadyState::UpdateHosting()
 {
-	NetSession* theNetSession = NetSession::GetInstance();
-	
-	//if we have a client bound
-	if (theNetSession->GetNumBoundConnections() > 1)
+	if(IsMatchSetupComplete())
 	{
-		for (int connectionIndex = 0; connectionIndex < MAX_NUM_NET_CONNECTIONS; ++connectionIndex)
-		{
-			TODO("need a bool confirming everyone is correctly loaded");
-			if (theNetSession->m_boundConnections[connectionIndex]->IsClient() && theNetSession->m_boundConnections[connectionIndex]->IsReady())
-			{
-				TODO("initialize playing state with correct data");
-				GameState::TransitionGameStates(GetGameStateFromGlobalListByType(PLAYING_GAME_STATE));
-			}			
-		}
+		GameState::TransitionGameStates(GetGameStateFromGlobalListByType(PLAYING_GAME_STATE));
 	}
 }
 
 //  =========================================================================================
 void ReadyState::UpdateJoining()
 {
-	NetSession* theNetSession = NetSession::GetInstance();
-
-	//need a message tell them to transition states.
-
-	TODO("need a bool confirming everyone is correctly loaded");
-	if (theNetSession->m_hostConnection->IsReady() && theNetSession->m_myConnection->IsReady())  
+	if (IsMatchSetupComplete())
 	{
-		TODO("initialize playing state with correct data");
 		GameState::TransitionGameStates(GetGameStateFromGlobalListByType(PLAYING_GAME_STATE));
+	}
+
+	NetSession* theNetSession = NetSession::GetInstance();
+	if (theNetSession->m_hostConnection && theNetSession->m_myConnection->IsReady())
+	{
+
 	}
 }
 

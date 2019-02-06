@@ -2,6 +2,7 @@
 #include "Engine\Net\NetSession.hpp"
 #include "Engine\Net\NetMessage.hpp"
 #include "Engine\Net\NetConnection.hpp"
+#include "Engine\Core\Command.hpp"
 
 enum eNetGameMessages
 {
@@ -16,9 +17,22 @@ enum eNetGameMessages
 	NUM_NGM
 };
 
+void RegisterGameMessages();
+void RegisterGameCommands();
+
+//game commands
+void SendDeck(Command& cmd);
+void SendGamePing(Command& cmd);
+void SendReadyConfirmation(Command& cmd);
+void SendWaiting(Command& cmd);
+void SendDrawCard(Command& cmd);
+void SendPlayCard(Command& cmd);
+void SendSummonCharacter(Command& cmd);
+void SendMyDeckDefinition(Command& cmd);
+
 bool OnGamePing(NetMessage& message, NetConnection* fromConnection);
-bool OnUpToDateConfirmation(NetMessage& message, NetConnection* fromConnection);
-bool OnWaitingForUpToDate(NetMessage& message, NetConnection* fromConnection);
+bool OnReadyConfirmation(NetMessage& message, NetConnection* fromConnection);
+bool OnWaiting(NetMessage& message, NetConnection* fromConnection);
 bool OnPlayingStateReady(NetMessage& message, NetConnection* fromConnection);
 bool OnReceiveDeck(NetMessage& message, NetConnection* fromConnection);
 bool OnDrawCard(NetMessage& message, NetConnection* fromConnection);

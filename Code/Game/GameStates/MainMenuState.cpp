@@ -65,9 +65,9 @@ void MainMenuState::Render()
 
 	//info text
 	std::string deckText = "Loaded Deck: ";
-	if (Game::GetInstance()->m_loadedDeckDefinition != nullptr)
+	if (Game::GetInstance()->m_playerLoadedDeckDefinition != nullptr)
 	{
-		deckText = Stringf("%s%s", deckText.c_str(), Game::GetInstance()->m_loadedDeckDefinition->m_deckName.c_str());
+		deckText = Stringf("%s%s", deckText.c_str(), Game::GetInstance()->m_playerLoadedDeckDefinition->m_deckName.c_str());
 	}
 	else
 	{

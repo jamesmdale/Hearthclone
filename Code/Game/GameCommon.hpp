@@ -27,6 +27,12 @@ enum eCardType
 	NUM_CARD_TYPES
 };
 
+// game details =========================================================================================
+extern int g_deckSize = 30;
+const int g_maxHandSize = 11;
+const int g_maxMinionCount = 7;
+
+
 // class colors =========================================================================================
 extern Rgba g_druidClassColor;
 extern Rgba g_hunterClassColor;
@@ -52,8 +58,6 @@ const float g_minionPercentageOfClientWindowHeight = 0.1f;
 
 const float g_cardAspectRatio = 0.722f;
 const float g_minionAspectRatio = 1.538f;
-const int g_maxHandSize = 11;
-const int g_maxMinionCount = 7;
 const int g_maxBattlefieldSize = 11;
 
 const float g_targetingPercentageOfClientWindowHeight = 0.05f;

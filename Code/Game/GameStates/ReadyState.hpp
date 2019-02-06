@@ -31,6 +31,7 @@ public:
 	virtual void ResetState() override;
 
 	//net functions
+	bool IsMatchSetupComplete();
 	void SetupHost();
 	void SetupClient();
 

@@ -35,6 +35,8 @@ public:
 	bool GetCharacterWidgets(std::vector<Character*>& outCharacters);
 	Character* GetSelectedCharacter(const std::vector<Character*>& widgets);
 
+	void SetupGameAsHost();
+	void SetupPlayers();
 	Character* GetCharacterById(int characterId);
 	void RegisterNetMessages();
 
@@ -53,6 +55,8 @@ public:
 	
 	Player* m_activePlayer = nullptr;
 	int m_turnCount;
+
+	bool m_isHosting = false;
 
 	//MatchLog
 };

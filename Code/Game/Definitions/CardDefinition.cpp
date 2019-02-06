@@ -15,6 +15,8 @@ CardDefinition::CardDefinition(const tinyxml2::XMLElement& element)
 
 	m_subType = ParseXmlAttribute(element, "subtype", m_subType);
 
+	m_id = ParseXmlAttribute(element, "id", m_id);
+
 	//get image value
 	const tinyxml2::XMLElement* imageElement = element.FirstChildElement("Image");
 	if (imageElement)

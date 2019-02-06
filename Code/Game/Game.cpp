@@ -221,7 +221,7 @@ void Game::LoadDefaultDeck()
 {
 	if (DeckDefinition::s_deckDefinitions.size() > 0)
 	{
-		m_loadedDeckDefinition = DeckDefinition::s_deckDefinitions.begin()->second;
+		m_playerLoadedDeckDefinition = DeckDefinition::s_deckDefinitions.begin()->second;
 	}
 }
 
@@ -238,7 +238,7 @@ void LoadDeck(Command& cmd)
 
 	if (deckDefinitionIterator != DeckDefinition::s_deckDefinitions.end())
 	{
-		g_theGame->m_loadedDeckDefinition = deckDefinitionIterator->second;
+		g_theGame->m_playerLoadedDeckDefinition = deckDefinitionIterator->second;
 		DevConsolePrintf("Deck '(%s)' successfully loaded!!", deckName.c_str());
 	}	 
 	else

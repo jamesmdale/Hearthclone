@@ -49,9 +49,6 @@ void PlayingState::OnConstructionSetup()
 //  =============================================================================
 void PlayingState::Initialize()
 {
-	Renderer* theRenderer = Renderer::GetInstance();
-	MeshBuilder meshBuilder;
-
 	m_turnStateManager = new TurnStateManager();
 	m_turnStateManager->m_playingState = this;
 
@@ -64,28 +61,24 @@ void PlayingState::Initialize()
 	m_player = new Player();
 	m_player->m_playerId = SELF_PLAYER_TYPE;
 	m_player->m_gameState = this;
-	m_player->LoadDeckFromDefinitionName("All Yetis");
-	m_player->Initialize();
+	
 
 	//load their decks
 	m_enemyPlayer = new Player();
 	m_enemyPlayer->m_playerId = ENEMY_PLAYER_TYPE;
 	m_enemyPlayer->m_gameState = this;
-	m_enemyPlayer->LoadDeckFromDefinitionName("All Yetis Warlock");	
-	m_enemyPlayer->Initialize();
-
+	
 	//start game time
 	m_gameTime = new Stopwatch();
 	m_gameTime->SetClock(GetMasterClock());
 
-	m_activePlayer = m_player;	
+	//setup network
+	m_isHosting = Game::GetInstance()->m_isHosting;
 
-	//update board dynamic renderables
-	m_gameBoard->RefreshEndTurnWidget();
-	m_gameBoard->RefreshPlayerManaWidget();
-
-	//cleanup
-	theRenderer = nullptr;	
+	if (m_isHosting)
+	{
+		SetupGameAsHost();
+	}
 }
 
 //  =============================================================================
@@ -286,6 +279,31 @@ Character* PlayingState::GetSelectedCharacter(const std::vector<Character*>& wid
 	return selectedWidget;
 }
 
+//  =========================================================================================
+void PlayingState::SetupGameAsHost()
+{
+	if (FlipCoin())
+	{
+		m_activePlayer
+	}
+}
+
+//  =========================================================================================
+void PlayingState::SetupPlayers()
+{
+	m_player->LoadDeckFromDefinitionName("All Yetis");
+	m_player->Initialize();
+
+	m_enemyPlayer->LoadDeckFromDefinitionName("All Yetis Warlock");
+	m_enemyPlayer->Initialize();
+
+	m_activePlayer = m_player;
+
+	//update board dynamic renderables
+	m_gameBoard->RefreshEndTurnWidget();
+	m_gameBoard->RefreshPlayerManaWidget();
+}
+
 //  =============================================================================
 Character* PlayingState::GetCharacterById(int characterId)
 {
@@ -319,7 +337,8 @@ void PlayingState::RegisterNetMessages()
 {
 	NetSession* theNetSession = NetSession::GetInstance();
 
-	theNetSession->RegisterMessageDefinition(PLAYING_STATE_READY_NGM, "playing_state_ready", OnPlayingStateReady);
+	RegisterGameMessages();
+	RegisterGameCommands();
 }
 
 

@@ -29,8 +29,8 @@ public:
 	std::string m_name = "";
 	eCardType m_type = NUM_CARD_TYPES;
 	std::string m_subType = "";
-	eClass m_class = NEUTRAL_CLASS;
-	
+	uint16 m_id = UINT16_MAX;
+	eClass m_class = NEUTRAL_CLASS;	
 
 	std::string m_imagePath = "";
 	

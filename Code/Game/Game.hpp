@@ -25,23 +25,6 @@ enum eGameNetMessageType
 
 class Game
 {
-public:  
-	//camera members
-	Camera* m_gameCamera = nullptr;
-
-	//rendering members
-	ForwardRenderingPath2D* m_forwardRenderingPath2D = nullptr;
-
-	//clock
-	Clock* m_gameClock = nullptr;
-
-	//game members
-	DeckDefinition* m_loadedDeckDefinition = nullptr;
-	bool m_isHosting = false;
-
-	std::string m_hostAddress = "";
-	Stopwatch* m_reliableSendTimer = nullptr;
-
 public:
 	Game();
 	~Game();
@@ -65,6 +48,24 @@ public:
 
 	//game functions
 	void LoadDefaultDeck();
+
+public:
+	//camera members
+	Camera * m_gameCamera = nullptr;
+
+	//rendering members
+	ForwardRenderingPath2D* m_forwardRenderingPath2D = nullptr;
+
+	//clock
+	Clock* m_gameClock = nullptr;
+
+	//game members
+	DeckDefinition* m_playerLoadedDeckDefinition = nullptr;
+	DeckDefinition* m_enemyLoadedDeckDefinition = nullptr;
+	bool m_isHosting = false;
+
+	std::string m_hostAddress = "";
+	Stopwatch* m_reliableSendTimer = nullptr;
 	
 };
 
