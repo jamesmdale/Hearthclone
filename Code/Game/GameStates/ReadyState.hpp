@@ -32,6 +32,9 @@ public:
 
 	//net functions
 	bool IsMatchSetupComplete();
+	bool IsNetworkSetupComplete();
+	bool AreDecksLoaded();
+
 	void SetupHost();
 	void SetupClient();
 
@@ -39,7 +42,6 @@ public:
 	void UpdateJoining();
 
 	std::string GetConnectionStateAsText();
-
 
 public:
 	Texture* m_backGroundTexture;

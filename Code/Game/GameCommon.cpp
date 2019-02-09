@@ -5,7 +5,7 @@
 bool g_isDebug = false;
 bool g_isQuitting = false;
 
-//class colors
+//class colors ----------------------------------------------
 Rgba g_druidClassColor = Rgba(120, 87, 37, 255);
 Rgba g_hunterClassColor = Rgba(70, 120, 37, 255);
 Rgba g_mageClassColor = Rgba(89, 146, 236, 255);
@@ -17,13 +17,10 @@ Rgba g_warlockClassColor = Rgba(132, 39, 190, 255);
 Rgba g_warriorClassColor = Rgba(152, 41, 41, 255);
 Rgba g_neutralClassColor = Rgba(106, 97, 97, 255);
 
-//sort layers
+//sort layers ----------------------------------------------
 int g_defaultBoardSortLayer = 0;
 int g_defaultCardSortLayer = 1;
 int g_sortLayerMax = 999;
-
-// default network settings
-int g_defaultPort = 10084;
 
 //  =========================================================================================
 Rgba GetCardColorByClass(eClass cardClass)

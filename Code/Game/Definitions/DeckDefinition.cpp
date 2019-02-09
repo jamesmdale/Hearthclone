@@ -45,7 +45,7 @@ void DeckDefinition::Initialize(const std::string& filePath)
 	}
 }
 
-DeckDefinition* DeckDefinition::GetDefinitionByName(const std::string& deckName)
+DeckDefinition* DeckDefinition::GetDeckDefinitionByName(const std::string& deckName)
 {
 	std::map<std::string, DeckDefinition*>::iterator mapIterator = s_deckDefinitions.find(deckName);
 	if (mapIterator == s_deckDefinitions.end()) {

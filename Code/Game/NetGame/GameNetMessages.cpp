@@ -6,6 +6,7 @@
 #include "Game\Game.hpp"
 #include "Game\GameCommon.hpp"
 #include "Game\Entity\Card.hpp"
+#include "Game\Definitions\DeckDefinition.hpp"
 #include "Engine\Net\NetSession.hpp"
 #include "Engine\Core\DevConsole.hpp"
 
@@ -14,16 +15,16 @@ void RegisterGameMessages()
 {
 	NetSession* theNetSession = NetSession::GetInstance();
 
-	theNetSession->RegisterMessageDefinition(PING_NGM, "ping_gnm", OnGamePing, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
-	theNetSession->RegisterMessageDefinition(UP_TO_DATE_CONFIRMATION_NGM, "up_to_date_confirmation_gnm", OnReadyConfirmation, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
-	theNetSession->RegisterMessageDefinition(WAITING_FOR_UP_TO_DATE_GNM, "waiting_for_update_gnm", OnWaiting, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
-	theNetSession->RegisterMessageDefinition(PLAYING_STATE_READY_NGM, "playing_state_ready_gnm", OnPlayingStateReady, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
-	theNetSession->RegisterMessageDefinition(SEND_DECK_NGM, "send_deck_gnm", OnReceiveDeck, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
-	theNetSession->RegisterMessageDefinition(DRAW_CARD_NGM, "draw_card_gnm", OnDrawCard, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
-	theNetSession->RegisterMessageDefinition(PLAY_CARD_NGM, "play_card_gnm", OnPlayCard, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
-	theNetSession->RegisterMessageDefinition(SUMMON_CHARACTER_NGM, "summon_character_gnm", OnSummonCharacter, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
-	theNetSession->RegisterMessageDefinition(SUMMON_CHARACTER_NGM, "send_my_deck_definition_gnm", OnSummonCharacter, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
-
+	//register all definitions;
+	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex, "ping_gnm", OnGamePing, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
+	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 1, "up_to_date_confirmation_gnm", OnReadyConfirmation, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
+	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 2, "waiting_for_update_gnm", OnWaiting, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
+	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 3, "playing_state_ready_gnm", OnPlayingStateReady, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
+	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 4, "send_deck_gnm", OnReceiveDeck, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
+	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 5, "draw_card_gnm", OnDrawCard, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
+	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 6, "play_card_gnm", OnPlayCard, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
+	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 7, "summon_character_gnm", OnSummonCharacter, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
+	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 8, "send_my_deck_definition_gnm", OnReceiveDeckDefinition, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
 }
 
 //  =========================================================================================
@@ -48,7 +49,7 @@ void SendDeck(Command& cmd)
 	Game* theGame = Game::GetInstance();
 
 	PlayingState* playingState = (PlayingState*)GameState::GetCurrentGameState();
-	if(playingState == nullptr)
+	if (playingState->m_type != PLAYING_GAME_STATE)
 		return;
 
 	//make sure we are connected to the right connection
@@ -131,38 +132,24 @@ void SendSummonCharacter(Command& cmd)
 
 }
 
+//  =========================================================================================
 void SendMyDeckDefinition(Command& cmd)
 {
 	// standard function setup ----------------------------------------------
 	NetSession* theNetSession = NetSession::GetInstance();
 	Game* theGame = Game::GetInstance();
 
-	PlayingState* playingState = (PlayingState*)GameState::GetCurrentGameState();
-	if (playingState == nullptr)
-		return;
-
-	//make sure we are connected to the right connection
-	int connectionIndex = cmd.GetNextInt();
-
-	NetConnection* connection = theNetSession->GetBoundConnectionById(connectionIndex);
-	if (connection == nullptr)
-	{
-		DebuggerPrintf("Connection index (%i) is invalid!!", connectionIndex);
-		ASSERT_OR_DIE(false, "INVALID CONNECTION INDEX IN SEND DECK!");
-		return;
-	}
-
-
 	//get my loaded deck definition name
-	std::string deckDefinitionName = Game::GetInstance()->m_playerLoadedDeckDefinition->m_deckName;
+	char deckDefinitionName[g_maxNetStringBytes];
+	strcpy_s(deckDefinitionName, Game::GetInstance()->m_playerLoadedDeckDefinition->m_deckName.c_str());
+
 	NetMessage* message = new NetMessage("send_my_deck_definition_gnm");
 
 	//write the definition name and send it
-	message->WriteBytes(deckDefinitionName.size() + 1, &deckDefinitionName, false);
+	message->WriteBytes(g_maxNetStringBytes, &deckDefinitionName, false);
 
-	connection->QueueMessage(message);
+	theGame->m_enemyConnection->QueueMessage(message);
 }
-
 
 //  =========================================================================================
 //	Messages
@@ -188,6 +175,30 @@ bool OnWaiting(NetMessage& message, NetConnection* fromConnection)
 bool OnPlayingStateReady(NetMessage& message, NetConnection* fromConnection)
 {
 	return false;
+}
+
+//  =========================================================================================
+bool OnReceiveDeckDefinition(NetMessage& message, NetConnection* fromConnection)
+{
+	char* deckDefinitionName = "";
+	Game* theGame = Game::GetInstance();
+
+	//if we already have their deck there is no reason to process this message
+	if(theGame->m_enemyLoadedDeckDefinition != nullptr)
+		return false;
+
+	bool success = message.ReadBytes(deckDefinitionName, (size_t)g_maxNetStringBytes, false);
+
+	if (!success)
+	{
+		DevConsolePrintf("Received ReceiveDeckDef function from connection %i. Could not read param1", fromConnection->GetConnectionIndex() );
+		ASSERT_OR_DIE(false, "Received ReceiveDeckDef function from connection %i. Could not read param1", fromConnection->GetConnectionIndex());
+		return false;
+	}
+
+	theGame->m_enemyLoadedDeckDefinition = DeckDefinition::GetDeckDefinitionByName(deckDefinitionName);
+
+	return true;
 }
 
 //  =========================================================================================

@@ -38,7 +38,6 @@ public:
 	void SetupGameAsHost();
 	void SetupPlayers();
 	Character* GetCharacterById(int characterId);
-	void RegisterNetMessages();
 
 public:
 	Board* m_gameBoard = nullptr;

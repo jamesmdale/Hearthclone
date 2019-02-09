@@ -27,13 +27,21 @@ enum eCardType
 	NUM_CARD_TYPES
 };
 
-// game details =========================================================================================
-extern int g_deckSize = 30;
-const int g_maxHandSize = 11;
-const int g_maxMinionCount = 7;
+
+// game details ----------------------------------------------
+extern bool g_isDebug;
+extern bool g_isQuitting;
+constexpr int g_deckSize = 30;
+constexpr int g_maxHandSize = 11;
+constexpr int g_maxMinionCount = 7;
 
 
-// class colors =========================================================================================
+// net details ----------------------------------------------
+constexpr size_t g_maxNetStringBytes = 16;
+constexpr int g_defaultPort = 10084;
+constexpr int g_startingNetRegistrationIndex = 100;
+
+// class colors ----------------------------------------------
 extern Rgba g_druidClassColor;
 extern Rgba g_hunterClassColor;
 extern Rgba g_mageClassColor;
@@ -45,7 +53,7 @@ extern Rgba g_warlockClassColor;
 extern Rgba g_warriorClassColor;
 extern Rgba g_neutralClassColor;
 
-// entity sizes =========================================================================================
+// entity sizes ----------------------------------------------
 
 //board sizes
 const float g_boardHandPercentageOfClientWindow = 0.15f; //hand uses fullwidth
@@ -120,20 +128,13 @@ const Vector2 g_manaPercentageOfClientWindow = Vector2(0.1f, 0.1f);
 const Vector2 g_endTurnButtonPercentageOfClientWindow = Vector2(0.1f, 0.1f);
 
 
-// game related globals =========================================================================================
-extern bool g_isDebug;
-extern bool g_isQuitting;
-
-// default sorting layers =========================================================================================
+// default sorting layers ----------------------------------------------
 
 extern int g_defaultBoardSortLayer;
 extern int g_defaultCardSortLayer;
 extern int g_sortLayerMax;
 
-// default network settings =========================================================================================
-extern int g_defaultPort;
-
-// methods =========================================================================================
+// methods ----------------------------------------------
 Rgba GetCardColorByClass(eClass cardClass);
 
 eClass GetClassByName(const std::string & className);

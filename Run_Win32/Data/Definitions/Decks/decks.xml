@@ -1,5 +1,5 @@
 <DeckDefinitions>
-  <DeckDefinition deckName="All Yetis">
+  <DeckDefinition deckName="All Yeti">
     <Hero name="Jaina Proudmoore" />
     <Cards>
       <Card name="Chillwind Yeti" />
@@ -40,7 +40,7 @@
     </Cards>
   </DeckDefinition>
 
-  <DeckDefinition deckName="All Yetis Warlock">
+  <DeckDefinition deckName="All Yetis Lock">
     <Hero name="Gul'dan" />
     <Cards>
       <Card name="Chillwind Yeti" />

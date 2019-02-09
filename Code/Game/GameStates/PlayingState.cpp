@@ -14,6 +14,7 @@
 #include "Engine\Renderer\MeshBuilder.hpp"
 #include "Engine\Debug\DebugRender.hpp"
 #include "Engine\Core\StringUtils.hpp"
+#include "Engine\Math\MathUtils.hpp"
 #include <map>
 #include <string>
 
@@ -43,7 +44,7 @@ PlayingState::~PlayingState()
 //  =========================================================================================
 void PlayingState::OnConstructionSetup()
 {
-	RegisterNetMessages();
+	//does nothing for now
 }
 
 //  =============================================================================
@@ -60,8 +61,7 @@ void PlayingState::Initialize()
 	//add players
 	m_player = new Player();
 	m_player->m_playerId = SELF_PLAYER_TYPE;
-	m_player->m_gameState = this;
-	
+	m_player->m_gameState = this;	
 
 	//load their decks
 	m_enemyPlayer = new Player();
@@ -282,19 +282,19 @@ Character* PlayingState::GetSelectedCharacter(const std::vector<Character*>& wid
 //  =========================================================================================
 void PlayingState::SetupGameAsHost()
 {
-	if (FlipCoin())
-	{
-		m_activePlayer
-	}
+	FlipCoin() ? m_activePlayer = m_player : m_activePlayer = m_enemyPlayer;
+
+	//load decks
+	//shuffle decks
 }
 
 //  =========================================================================================
 void PlayingState::SetupPlayers()
 {
-	m_player->LoadDeckFromDefinitionName("All Yetis");
+	m_player->LoadDeckFromDefinitionName("All Yeti");
 	m_player->Initialize();
 
-	m_enemyPlayer->LoadDeckFromDefinitionName("All Yetis Warlock");
+	m_enemyPlayer->LoadDeckFromDefinitionName("All Yetis Lock");
 	m_enemyPlayer->Initialize();
 
 	m_activePlayer = m_player;
@@ -331,14 +331,3 @@ Character* PlayingState::GetCharacterById(int characterId)
 	//if we didn't find the character return nullptr
 	return nullptr;
 }
-
-//  =========================================================================================
-void PlayingState::RegisterNetMessages()
-{
-	NetSession* theNetSession = NetSession::GetInstance();
-
-	RegisterGameMessages();
-	RegisterGameCommands();
-}
-
-

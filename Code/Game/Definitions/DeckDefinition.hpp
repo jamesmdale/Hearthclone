@@ -15,7 +15,7 @@ class DeckDefinition
 public:
 	explicit DeckDefinition(const tinyxml2::XMLElement& element);
 	static void Initialize(const std::string& filePath);
-	static DeckDefinition* GetDefinitionByName(const std::string& deckName);
+	static DeckDefinition* GetDeckDefinitionByName(const std::string& deckName);
 
 public :
 	std::string m_deckName;

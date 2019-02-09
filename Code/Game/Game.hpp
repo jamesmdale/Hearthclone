@@ -64,6 +64,9 @@ public:
 	DeckDefinition* m_enemyLoadedDeckDefinition = nullptr;
 	bool m_isHosting = false;
 
+	NetConnection* m_myConnection = nullptr;
+	NetConnection* m_enemyConnection = nullptr;
+
 	std::string m_hostAddress = "";
 	Stopwatch* m_reliableSendTimer = nullptr;
 	

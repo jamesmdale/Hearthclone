@@ -1,5 +1,16 @@
 #include <stdlib.h>
 #include "Game\Game.hpp"
+#include "Game\Definitions\DeckDefinition.hpp"
+#include "Game\Actions\Action.hpp"
+#include "Game\Effects\Effect.hpp"
+#include "Game\Definitions\HeroDefinition.hpp"
+#include "Game\GameCommon.hpp"
+#include "Game\GameStates\GameState.hpp"
+#include "Game\GameStates\MainMenuState.hpp"
+#include "Game\GameStates\LoadingState.hpp"
+#include "Game\GameStates\PlayingState.hpp"
+#include "Game\GameStates\ReadyState.hpp"
+#include "Game\NetGame\GameNetMessages.hpp"
 #include "Engine\Math\MathUtils.hpp"
 #include "Engine\Renderer\Renderer.hpp"
 #include "Engine\Math\Matrix44.hpp"
@@ -15,21 +26,9 @@
 #include "Engine\Core\StringUtils.hpp"
 #include "Engine\Core\EngineCommon.hpp"
 #include "Engine\Core\DevConsole.hpp"
-#include "Game\Definitions\DeckDefinition.hpp"
-#include "Game\Actions\Action.hpp"
-#include "Game\Effects\Effect.hpp"
-#include "Game\Definitions\HeroDefinition.hpp"
-#include "Game\GameCommon.hpp"
-#include "Game\GameStates\GameState.hpp"
-#include "Game\GameStates\MainMenuState.hpp"
-#include "Game\GameStates\LoadingState.hpp"
-#include "Game\GameStates\PlayingState.hpp"
-#include "Game\GameStates\ReadyState.hpp"
 #include "Engine\Net\NetSession.hpp"
 #include "Engine\Net\NetConnection.hpp"
 #include "Engine\Net\NetMessage.hpp"
-
-
 #include <vector>
 #include <string>
 
@@ -102,7 +101,8 @@ void Game::Initialize()
 	RegisterCommand("change_host", CommandRegistration(ChangeHost, ": change the intended host to join (string ip address)", ""));
 
 	//net message registration
-	RegisterGameNetMessages();
+	RegisterGameMessages();
+	RegisterGameCommands();
 
 	// add cameras
 	m_gameCamera = new Camera();

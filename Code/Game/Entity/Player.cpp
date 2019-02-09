@@ -94,7 +94,7 @@ void Player::PreRender()
 //  =========================================================================================
 void Player::LoadDeckFromDefinitionName(const std::string& deckName)
 {
-	DeckDefinition* deckDefinition = DeckDefinition::GetDefinitionByName(deckName);
+	DeckDefinition* deckDefinition = DeckDefinition::GetDeckDefinitionByName(deckName);
 
 	// clear contents of current deck
 	if ((int)m_deck.size() > 0)
