@@ -146,6 +146,8 @@ void GameState::UpdateGlobalGameState(float deltaSeconds)
 //  =========================================================================================
 void GameState::FinishTransition()
 {
+	g_currentState->ResetState();
+
 	g_currentState = g_transitionState;
 	g_transitionState = nullptr;
 	s_isFinishedTransitioningIn = true;

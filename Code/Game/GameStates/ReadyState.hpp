@@ -8,6 +8,15 @@ enum eReadyStateMenuOptions
 	NUM_READY_STATE_OPTIONS
 };
 
+enum eMatchSetupStates
+{
+	SETTING_UP_NETWORK,
+	LOADING_DECK,
+	CONFIRMING,
+	READY,
+	NUM_MATCH_SETUP_STATES
+};
+
 class ReadyState : public GameState
 {
 public:
@@ -31,7 +40,10 @@ public:
 	virtual void ResetState() override;
 
 	//net functions
-	bool IsMatchSetupComplete();
+	void SetupNetwork();
+	void LoadDecks();
+	void ConfirmSetup();
+	
 	bool IsNetworkSetupComplete();
 	bool AreDecksLoaded();
 	bool IsEnemyReady();
@@ -39,14 +51,17 @@ public:
 	void SetupHost();
 	void SetupClient();
 
-	void UpdateHosting();
-	void UpdateJoining();
-
 	std::string GetConnectionStateAsText();
 
 public:
 	Texture* m_backGroundTexture;
 	eReadyStateMenuOptions m_selectedMenuOption = BACK_TO_MAIN_READY_STATE;
 	Stopwatch* m_connectionTimer = nullptr;
+
+	//connection state setup
+	bool m_isEnemyReady = false;
+	bool m_isDeckDefSent = false;
+	bool m_isReadyConfirmationSent = false;
+	eMatchSetupStates m_matchSetupState = SETTING_UP_NETWORK;
 };
 

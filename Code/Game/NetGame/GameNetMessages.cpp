@@ -1,4 +1,5 @@
 #include "Game\GameStates\PlayingState.hpp"
+#include "Game\GameStates\ReadyState.hpp"
 #include "Game\GameStates\GameState.hpp"
 #include "Game\Board.hpp"
 #include "Game\Entity\Player.hpp"
@@ -109,9 +110,15 @@ void SendReadyConfirmation(Command& cmd)
 	NetSession* theNetSession = NetSession::GetInstance();
 	Game* theGame = Game::GetInstance();
 
+	ReadyState* readyState = (ReadyState*)GameState::GetCurrentGameState();
+	if (readyState->m_type != READY_GAME_STATE)
+		return;
+
 	NetMessage* message = new NetMessage("ready_confirmation_gnm");
 
 	theGame->m_enemyConnection->QueueMessage(message);
+
+	readyState->m_isReadyConfirmationSent = true;
 }
 
 //  =========================================================================================
@@ -168,14 +175,16 @@ bool OnGamePing(NetMessage& message, NetConnection* fromConnection)
 //  =========================================================================================
 bool OnReadyConfirmation(NetMessage& message, NetConnection* fromConnection)
 {
-	char deckDefinitionName[g_maxNetStringBytes];
+	NetSession* theNetSession = NetSession::GetInstance();
 	Game* theGame = Game::GetInstance();
 
-	//if we already have their deck there is no reason to process this message
-	if (theGame->m_isEnemyReady == true)
-		return true;
+	ReadyState* readyState = (ReadyState*)GameState::GetCurrentGameState();
+	if (readyState->m_type != READY_GAME_STATE)
+		return false;
+		
+	readyState->m_isEnemyReady = true;
 
-	return false;
+	return true;
 }
 
 //  =========================================================================================

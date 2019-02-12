@@ -188,14 +188,12 @@ void MainMenuState::JoinOnInput()
 //  =========================================================================================
 void MainMenuState::TransitionToReady()
 {
-	ResetState();
 	GameState::TransitionGameStates(GetGameStateFromGlobalListByType(READY_GAME_STATE));
 }
 
 //  =========================================================================================
 void MainMenuState::TransitionToPlaying()
 {
-	ResetState();
 	GameState::TransitionGameStates(GetGameStateFromGlobalListByType(PLAYING_GAME_STATE));
 }
 

@@ -5,6 +5,7 @@
 
 std::map<std::string, CardDefinition*> CardDefinition::s_cardDefinitions;
 
+//  =========================================================================================
 CardDefinition::CardDefinition(const tinyxml2::XMLElement& element)
 {
 	m_name = ParseXmlAttribute(element, "name", m_name);
@@ -104,6 +105,7 @@ CardDefinition::CardDefinition(const tinyxml2::XMLElement& element)
 	}
 }
 
+//  =========================================================================================
 void CardDefinition::Initialize(const std::string& filePath)
 {
 	tinyxml2::XMLDocument tileDefDoc;
@@ -118,6 +120,7 @@ void CardDefinition::Initialize(const std::string& filePath)
 	}
 }
 
+//  =========================================================================================
 CardDefinition* CardDefinition::GetDefinitionByName(const std::string& cardName)
 {
 	std::map<std::string, CardDefinition*>::iterator mapIterator = s_cardDefinitions.find(cardName);
@@ -130,6 +133,7 @@ CardDefinition* CardDefinition::GetDefinitionByName(const std::string& cardName)
 	}
 }
 
+//  =========================================================================================
 eCardType CardDefinition::ConvertTypeToCardTypeEnum(std::string cardType)
 {
 	if(cardType == "minion")
