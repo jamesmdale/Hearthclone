@@ -63,6 +63,7 @@ public:
 	DeckDefinition* m_playerLoadedDeckDefinition = nullptr;
 	DeckDefinition* m_enemyLoadedDeckDefinition = nullptr;
 	bool m_isHosting = false;
+	bool m_isEnemyReady = false;
 
 	NetConnection* m_myConnection = nullptr;
 	NetConnection* m_enemyConnection = nullptr;

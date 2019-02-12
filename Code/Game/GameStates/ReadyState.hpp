@@ -34,6 +34,7 @@ public:
 	bool IsMatchSetupComplete();
 	bool IsNetworkSetupComplete();
 	bool AreDecksLoaded();
+	bool IsEnemyReady();
 
 	void SetupHost();
 	void SetupClient();

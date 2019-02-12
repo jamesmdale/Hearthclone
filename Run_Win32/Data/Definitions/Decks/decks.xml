@@ -1,5 +1,5 @@
 <DeckDefinitions>
-  <DeckDefinition deckName="All Yeti">
+  <DeckDefinition deckName="All Yetis">
     <Hero name="Jaina Proudmoore" />
     <Cards>
       <Card name="Chillwind Yeti" />

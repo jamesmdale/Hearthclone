@@ -17,7 +17,7 @@ void RegisterGameMessages()
 
 	//register all definitions;
 	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex, "ping_gnm", OnGamePing, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
-	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 1, "up_to_date_confirmation_gnm", OnReadyConfirmation, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
+	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 1, "ready_confirmation_gnm", OnReadyConfirmation, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
 	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 2, "waiting_for_update_gnm", OnWaiting, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
 	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 3, "playing_state_ready_gnm", OnPlayingStateReady, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
 	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 4, "send_deck_gnm", OnReceiveDeck, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
@@ -105,7 +105,13 @@ void SendGamePing(Command& cmd)
 //  =========================================================================================
 void SendReadyConfirmation(Command& cmd) 
 {
+	// standard function setup ----------------------------------------------
+	NetSession* theNetSession = NetSession::GetInstance();
+	Game* theGame = Game::GetInstance();
 
+	NetMessage* message = new NetMessage("ready_confirmation_gnm");
+
+	theGame->m_enemyConnection->QueueMessage(message);
 }
 
 //  =========================================================================================
@@ -160,8 +166,15 @@ bool OnGamePing(NetMessage& message, NetConnection* fromConnection)
 }
 
 //  =========================================================================================
-bool OnReadyConfirmation(NetMessage& message, NetConnection * fromConnection)
+bool OnReadyConfirmation(NetMessage& message, NetConnection* fromConnection)
 {
+	char deckDefinitionName[g_maxNetStringBytes];
+	Game* theGame = Game::GetInstance();
+
+	//if we already have their deck there is no reason to process this message
+	if (theGame->m_isEnemyReady == true)
+		return true;
+
 	return false;
 }
 
@@ -180,14 +193,14 @@ bool OnPlayingStateReady(NetMessage& message, NetConnection* fromConnection)
 //  =========================================================================================
 bool OnReceiveDeckDefinition(NetMessage& message, NetConnection* fromConnection)
 {
-	char* deckDefinitionName = "";
+	char deckDefinitionName[g_maxNetStringBytes];
 	Game* theGame = Game::GetInstance();
 
 	//if we already have their deck there is no reason to process this message
 	if(theGame->m_enemyLoadedDeckDefinition != nullptr)
 		return false;
 
-	bool success = message.ReadBytes(deckDefinitionName, (size_t)g_maxNetStringBytes, false);
+	bool success = message.ReadBytes(&deckDefinitionName, (size_t)g_maxNetStringBytes, false);
 
 	if (!success)
 	{

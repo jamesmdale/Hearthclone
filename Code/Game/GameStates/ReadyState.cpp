@@ -177,6 +177,13 @@ bool ReadyState::AreDecksLoaded()
 }
 
 //  =========================================================================================
+bool ReadyState::IsEnemyReady()
+{
+	bool enemyReady = Game::GetInstance()->m_isEnemyReady;
+	return enemyReady;
+}
+
+//  =========================================================================================
 void ReadyState::SetupHost()
 {
 	NetSession* theNetSession = NetSession::GetInstance();
@@ -211,13 +218,22 @@ void ReadyState::UpdateHosting()
 	NetSession* theNetSession = NetSession::GetInstance();
 	Game* theGame = Game::GetInstance();
 
-	if(IsMatchSetupComplete())
+	if(IsMatchSetupComplete() && IsEnemyReady())
 	{
 		GameState::TransitionGameStates(GetGameStateFromGlobalListByType(PLAYING_GAME_STATE));
 	}
 
+	//make sure my connection is setup
+	else if (theGame->m_myConnection == nullptr)
+	{
+		if (theNetSession->m_myConnection->IsReady())
+		{
+			theGame->m_myConnection = theNetSession->m_myConnection;
+		}
+	}
+
 	//setup enemy connection
-	if (theGame->m_enemyConnection == nullptr)
+	else if (theGame->m_enemyConnection == nullptr)
 	{
 		for (int connectionIndex = 0; connectionIndex < MAX_NUM_NET_CONNECTIONS; ++connectionIndex)
 		{
@@ -229,17 +245,8 @@ void ReadyState::UpdateHosting()
 		}
 	}
 
-	//make sure my connection is setup
-	if (theGame->m_myConnection == nullptr)
-	{
-		if (theNetSession->m_myConnection->IsReady())
-		{
-			theGame->m_myConnection = theNetSession->m_myConnection;
-		}
-	}
-
 	//we are setup and now we are just sending decklists
-	if(theGame->m_enemyConnection != nullptr && theGame->m_enemyLoadedDeckDefinition == nullptr)
+	else if(theGame->m_enemyConnection != nullptr && theGame->m_enemyLoadedDeckDefinition == nullptr)
 	{
 		static bool deckDefMessageSent = false;
 
@@ -250,6 +257,12 @@ void ReadyState::UpdateHosting()
 			SendMyDeckDefinition(sendDeckDefCMD);
 			deckDefMessageSent = true;
 		}
+	}
+
+	else if (IsMatchSetupComplete())
+	{
+		Command sendDeckDefCMD = Command("send_ready_confirmation_gnm");
+		SendMyDeckDefinition(sendDeckDefCMD);
 	}
 }
 
@@ -264,19 +277,19 @@ void ReadyState::UpdateJoining()
 	NetSession* theNetSession = NetSession::GetInstance();
 	Game* theGame = Game::GetInstance();
 
-	if (IsMatchSetupComplete())
+	if (IsMatchSetupComplete() && IsEnemyReady())
 	{
 		GameState::TransitionGameStates(GetGameStateFromGlobalListByType(PLAYING_GAME_STATE));
 	}
 
 	//make sure the host connection is setup and that their connection is set in the game
-	if (theNetSession->m_hostConnection != nullptr && theGame->m_enemyConnection == nullptr)
+	else if (theNetSession->m_hostConnection != nullptr && theGame->m_enemyConnection == nullptr)
 	{
 		theGame->m_enemyConnection = theNetSession->m_hostConnection;
 	}
 
 	//make sure we are ready and that our connection is set in the game
-	if (theNetSession->m_myConnection != nullptr)
+	else if (theNetSession->m_myConnection != nullptr)
 	{
 		if (theNetSession->m_myConnection->IsReady() && theGame->m_myConnection == nullptr)
 		{
@@ -284,7 +297,7 @@ void ReadyState::UpdateJoining()
 		}
 	}
 		
-	if (theNetSession->IsSessionStateReady() && theGame->m_enemyLoadedDeckDefinition == nullptr)
+	else if (theNetSession->IsSessionStateReady() && theGame->m_enemyLoadedDeckDefinition == nullptr)
 	{
 		static bool deckDefMessageSent = false;
 		//send deck definition to host. We keep doing this until we receive their deck and are ready
@@ -294,8 +307,13 @@ void ReadyState::UpdateJoining()
 			Command sendDeckDefCMD = Command("send_my_deck_definition_gnm");
 			SendMyDeckDefinition(sendDeckDefCMD);
 			deckDefMessageSent = true;
-		}
-		
+		}		
+	}
+
+	else if (IsMatchSetupComplete())
+	{
+		Command sendDeckDefCMD = Command("send_ready_confirmation_gnm");
+		SendMyDeckDefinition(sendDeckDefCMD);
 	}
 }
 
