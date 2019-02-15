@@ -60,10 +60,10 @@ void ReadyState::Update(float deltaSeconds)
 		break;
 	}
 
-	TODO("Setup state sending every frame");
+	/*TODO("Setup state sending every frame");
 	Command setupStateCMD = Command("send_setup_state");
-	setupState.AppendString()
-	SendSetupState()
+	setupStateCMD.AppendString(GetMatchSetupStateAsString().c_str());
+	SendSetupState(setupStateCMD);*/
 }
 
 //  =========================================================================================
@@ -79,12 +79,12 @@ void ReadyState::Render()
 	Window* theWindow = Window::GetInstance();
 	NetSession* theNetSession = NetSession::GetInstance();
 
-	Rgba playColor = Rgba::GRAY;
-	Rgba quitColor = Rgba::GRAY;
+	Rgba stateColor = Rgba::GRAY;
 
 	//get the state of the netsession for display
 	std::string connectionText = GetConnectionStateAsText();
-	std::string sessionStateText = GetMatchSetupStateAsString();
+	std::string setupStateText = GetMatchSetupStateAsString(m_matchSetupState);
+	std::string enemySetupStateText = GetMatchSetupStateAsString(m_enemyMatchSetupState);
 
 	theRenderer->SetCamera(m_camera);
 
@@ -95,7 +95,8 @@ void ReadyState::Render()
 
 	theRenderer->DrawAABB(theWindow->GetClientWindow(), Rgba(0.f, 0.f, 0.f, 1.f));
 	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .5f, theWindow->m_clientHeight * .66666f), connectionText.c_str(), theWindow->m_clientHeight * .0333f, Rgba::WHITE, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
-	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .5f, theWindow->m_clientHeight * .35f), sessionStateText.c_str(), theWindow->m_clientHeight * .0333f, playColor, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
+	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .5f, theWindow->m_clientHeight * .35f), setupStateText.c_str(), theWindow->m_clientHeight * .0333f, stateColor, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
+	theRenderer->DrawText2DCentered(Vector2(theWindow->m_clientWidth * .5f, theWindow->m_clientHeight * .15f), enemySetupStateText.c_str(), theWindow->m_clientHeight * .0333f, stateColor, 1.f, Renderer::GetInstance()->CreateOrGetBitmapFont("SquirrelFixedFont"));
 
 	theRenderer->m_defaultShader->DisableBlending();
 }
@@ -123,9 +124,6 @@ void ReadyState::ResetState()
 	m_isInitialized = false;
 
 	//reset bools for network setup
-	m_isEnemyReady = false;
-	m_isDeckDefSent = false;
-	m_isReadyConfirmationSent = false;
 	m_matchSetupState = SETTING_UP_NETWORK;
 
 	//cleanup timer
@@ -134,26 +132,26 @@ void ReadyState::ResetState()
 }
 
 //  =========================================================================================
-std::string ReadyState::GetMatchSetupStateAsString()
+std::string ReadyState::GetMatchSetupStateAsString(const eMatchSetupStates setupState)
 {
-	std::string setupState = "";
-	switch (m_matchSetupState)
+	std::string setupStateString = "";
+	switch (setupState)
 	{
 	case SETTING_UP_NETWORK:
-		setupState = "Setting up network...";
+		setupStateString = "Setting up network...";
 		break;
 	case LOADING_DECK:
-		setupState = "Loading Decks...";
+		setupStateString = "Loading Decks...";
 		break;
 	case CONFIRMING:
-		setupState = "Confirming opponent ready...";
+		setupStateString = "Confirming opponent ready...";
 		break;
 	case READY:
-		setupState = "LET'S !@$#ING GO!!!...";
+		setupStateString = "LET'S !@$#ING GO!!!...";
 		break;
 	}
 	
-	return setupState;
+	return setupStateString;
 }
 
 //  =========================================================================================
@@ -198,10 +196,12 @@ void ReadyState::SetupNetwork()
 		}
 	}
 	
-
 	if (IsNetworkSetupComplete())
 	{
 		m_matchSetupState = LOADING_DECK;
+
+		Command sendDeckDefCMD = Command("send_my_deck_definition_gnm");
+		SendMyDeckDefinition(sendDeckDefCMD);
 	}
 }
 
@@ -211,21 +211,12 @@ void ReadyState::LoadDecks()
 	Game* theGame = Game::GetInstance();
 	NetSession* theNetSession = NetSession::GetInstance();
 
-	//we are setup and now we are just sending decklists
-	if(theGame->m_enemyConnection != nullptr && theGame->m_enemyLoadedDeckDefinition == nullptr)
-	{
-		//send deck definition to client. We keep doing this until we receive their deck and are ready
-		if (!m_isDeckDefSent)
-		{
-			Command sendDeckDefCMD = Command("send_my_deck_definition_gnm");
-			SendMyDeckDefinition(sendDeckDefCMD);
-			m_isDeckDefSent = true;
-		}
-	}
-
 	if (AreDecksLoaded())
 	{
 		m_matchSetupState = CONFIRMING;
+
+		Command sendReadyConfirmation = Command("send_ready_confirmation_gcmd");
+		SendReadyConfirmation(sendReadyConfirmation);
 	}
 }
 
@@ -235,18 +226,7 @@ void ReadyState::ConfirmSetup()
 	Game* theGame = Game::GetInstance();
 	NetSession* theNetSession = NetSession::GetInstance();
 
-	if (!m_isReadyConfirmationSent)
-	{
-		static bool readyMessageSent = false;
-
-		if (!readyMessageSent)
-		{
-			Command sendReadyConfirmation = Command("send_ready_confirmation_gcmd");
-			SendReadyConfirmation(sendReadyConfirmation);
-		}		
-	}
-
-	if (m_isEnemyReady)
+	if (m_enemyMatchSetupState == READY)
 	{
 		m_matchSetupState = READY;
 	}
@@ -292,12 +272,6 @@ bool ReadyState::AreDecksLoaded()
 	}
 
 	return false;
-}
-
-//  =========================================================================================
-bool ReadyState::IsEnemyReady()
-{
-	return m_isEnemyReady;
 }
 
 //  =========================================================================================

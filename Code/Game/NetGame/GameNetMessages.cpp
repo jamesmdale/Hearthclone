@@ -26,13 +26,11 @@ void RegisterGameMessages()
 	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 6, "play_card_gnm", OnPlayCard, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
 	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 7, "summon_character_gnm", OnSummonCharacter, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
 	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 8, "send_my_deck_definition_gnm", OnReceiveDeckDefinition, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
-	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 9, "setup_state_gnm", OnReceiveSetupState, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
 }
 
 //  =========================================================================================
 void RegisterGameCommands()
 {
-	RegisterCommand("send_setup_state", CommandRegistration(SendSetupState, "", ""));
 	RegisterCommand("send_deck_gcmd", CommandRegistration(SendDeck, "", ""));
 	RegisterCommand("send_ping_gcmd", CommandRegistration(SendGamePing, "", ""));
 	RegisterCommand("send_ready_confirmation_gcmd", CommandRegistration(SendReadyConfirmation, "", ""));
@@ -42,41 +40,6 @@ void RegisterGameCommands()
 	RegisterCommand("send_summon_character_gcmd", CommandRegistration(SendSummonCharacter, "", ""));
 	RegisterCommand("send_my_deck_definition_gcmd", CommandRegistration(SendMyDeckDefinition, "", ""));
 
-}
-
-//  =========================================================================================
-void SendSetupState(Command& cmd)
-{
-	// standard function setup ----------------------------------------------
-	NetSession* theNetSession = NetSession::GetInstance();
-	Game* theGame = Game::GetInstance();
-
-	ReadyState* playingState = (ReadyState*)GameState::GetCurrentGameState();
-	if (playingState->m_type != READY_GAME_STATE)
-		return;
-
-	//make sure we are connected to the right connection
-	int connectionIndex = cmd.GetNextInt();
-	
-
-	//send setup state
-	int setupStateIndex = cmd.GetNextInt();
-
-	NetConnection* connection = theNetSession->GetBoundConnectionById(connectionIndex);
-	if (connection == nullptr)
-	{
-		DebuggerPrintf("Connection index (%i) is invalid!!", connectionIndex);
-		ASSERT_OR_DIE(false, "INVALID CONNECTION INDEX IN SEND DECK!");
-		return;
-	}
-
-	NetMessage* message = new NetMessage("setup_state_gnm");
-
-	//write which player type we are sending the deck for (us or the enemy player)
-	message->WriteBytes(sizeof(setupStateIndex), &setupStateIndex, false);
-
-	//queue up the message
-	connection->QueueMessage(message);
 }
 
 //game commands =========================================================================================
@@ -205,25 +168,6 @@ void SendMyDeckDefinition(Command& cmd)
 //	Messages
 //  =========================================================================================
 //  =========================================================================================
-bool OnReceiveSetupState(NetMessage& message, NetConnection* fromConnection)
-{
-	NetSession* theNetSession = NetSession::GetInstance();
-	Game* theGame = Game::GetInstance();
-
-	ReadyState* readyState = (ReadyState*)GameState::GetCurrentGameState();
-	if (readyState->m_type != READY_GAME_STATE)
-		return false;
-
-	int enemyConnectionStateIndex = 0;
-	bool success = message.ReadBytes(&enemyConnectionStateIndex, sizeof(enemyConnectionStateIndex), false);
-
-	if(success)
-		readyState->m_enemyMatchSetupState = (eMatchSetupStates)enemyConnectionStateIndex;
-
-	return success;
-}
-
-//  =========================================================================================
 bool OnGamePing(NetMessage& message, NetConnection* fromConnection)
 {
 	return false;
@@ -239,7 +183,7 @@ bool OnReadyConfirmation(NetMessage& message, NetConnection* fromConnection)
 	if (readyState->m_type != READY_GAME_STATE)
 		return false;
 		
-	//readyState->m_isEnemyReady = true;
+	readyState->m_enemyMatchSetupState = READY;
 
 	return true;
 }

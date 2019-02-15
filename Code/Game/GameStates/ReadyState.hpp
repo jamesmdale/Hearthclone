@@ -38,7 +38,7 @@ public:
 
 	virtual void ResetState() override;
 
-	std::string GetMatchSetupStateAsString();
+	std::string GetMatchSetupStateAsString(const eMatchSetupStates setupState);
 
 	//net functions
 	void SetupNetwork();
@@ -47,7 +47,6 @@ public:
 	
 	bool IsNetworkSetupComplete();
 	bool AreDecksLoaded();
-	bool IsEnemyReady();
 
 	void SetupHost();
 	void SetupClient();
