@@ -49,6 +49,8 @@ public:
 	static GameState* GetCurrentGameState();
 	static GameState* GetTransitionGameState();
 
+	static bool IsTransitioning();
+
 	//list managers
 	TODO("6/5 - Add better way of managing these. For now, we assume they only have one max of each possible type");
 	static GameState* GetGameStateFromGlobalListByType(eGameState gameStateType);

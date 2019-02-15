@@ -36,8 +36,9 @@ public:
 	virtual void PostRender() override;
 	virtual float UpdateFromInput(float deltaSeconds) override;
 
-	virtual void TransitionOut(float secondsTransitioning) override;
 	virtual void ResetState() override;
+
+	std::string GetMatchSetupStateAsString();
 
 	//net functions
 	void SetupNetwork();
@@ -59,9 +60,11 @@ public:
 	Stopwatch* m_connectionTimer = nullptr;
 
 	//connection state setup
-	bool m_isEnemyReady = false;
+	/*bool m_isEnemyReady = false;
 	bool m_isDeckDefSent = false;
-	bool m_isReadyConfirmationSent = false;
+	bool m_isReadyConfirmationSent = false;*/
+
 	eMatchSetupStates m_matchSetupState = SETTING_UP_NETWORK;
+	eMatchSetupStates m_enemyMatchSetupState = SETTING_UP_NETWORK;
 };
 

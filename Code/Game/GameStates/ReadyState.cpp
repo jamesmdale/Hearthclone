@@ -37,6 +37,9 @@ void ReadyState::Update(float deltaSeconds)
 {
 	UNUSED(deltaSeconds);
 
+	if(GameState::IsTransitioning())
+		return;
+
 	/**************** NOTES
 	Make sure that the enemy (client) is connected to us. Other than that, we are waiting for them to send us their decklist
 	before we are ready to move on to the match
@@ -56,6 +59,11 @@ void ReadyState::Update(float deltaSeconds)
 		GameState::TransitionGameStates(GetGameStateFromGlobalListByType(PLAYING_GAME_STATE));
 		break;
 	}
+
+	TODO("Setup state sending every frame");
+	Command setupStateCMD = Command("send_setup_state");
+	setupState.AppendString()
+	SendSetupState()
 }
 
 //  =========================================================================================
@@ -76,7 +84,7 @@ void ReadyState::Render()
 
 	//get the state of the netsession for display
 	std::string connectionText = GetConnectionStateAsText();
-	std::string sessionStateText = theNetSession->GetSessionStateAsString();
+	std::string sessionStateText = GetMatchSetupStateAsString();
 
 	theRenderer->SetCamera(m_camera);
 
@@ -109,16 +117,6 @@ float ReadyState::UpdateFromInput(float deltaSeconds)
 }
 
 //  =========================================================================================
-void ReadyState::TransitionOut(float secondsTransitioning)
-{
-	UNUSED(secondsTransitioning);
-	/*	does whatever it wants in terms of transitioning. when finished,
-	set s_isFinishedTransitioningOut to true
-	*/
-	SetFinishedTransitioningOut(true);
-}
-
-//  =========================================================================================
 void ReadyState::ResetState()
 {
 	//we need to reinitialize when we move to the ready state next time
@@ -133,6 +131,29 @@ void ReadyState::ResetState()
 	//cleanup timer
 	delete(m_connectionTimer);
 	m_connectionTimer = nullptr;
+}
+
+//  =========================================================================================
+std::string ReadyState::GetMatchSetupStateAsString()
+{
+	std::string setupState = "";
+	switch (m_matchSetupState)
+	{
+	case SETTING_UP_NETWORK:
+		setupState = "Setting up network...";
+		break;
+	case LOADING_DECK:
+		setupState = "Loading Decks...";
+		break;
+	case CONFIRMING:
+		setupState = "Confirming opponent ready...";
+		break;
+	case READY:
+		setupState = "LET'S !@$#ING GO!!!...";
+		break;
+	}
+	
+	return setupState;
 }
 
 //  =========================================================================================
@@ -315,11 +336,11 @@ std::string ReadyState::GetConnectionStateAsText()
 	std::string stateAsText = "";
 	if(Game::GetInstance()->m_isHosting)
 	{
-		stateAsText = "Waiting for opponent...";
+		stateAsText = "JOINING AS HOST";
 	}
 	else
 	{
-		stateAsText = "Joining opponent...";
+		stateAsText = "JOINING AS CLIENT";
 	}
 
 	if (m_connectionTimer != nullptr)

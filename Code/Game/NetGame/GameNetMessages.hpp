@@ -22,6 +22,7 @@ void RegisterGameMessages();
 void RegisterGameCommands();
 
 //game commands
+void SendSetupState(Command& cmd);
 void SendDeck(Command& cmd);
 void SendGamePing(Command& cmd);
 void SendReadyConfirmation(Command& cmd);
@@ -32,6 +33,7 @@ void SendSummonCharacter(Command& cmd);
 void SendMyDeckDefinition(Command& cmd);
 
 //game net message functions
+bool OnReceiveSetupState(NetMessage& message, NetConnection* fromConnection);
 bool OnGamePing(NetMessage& message, NetConnection* fromConnection);
 bool OnReadyConfirmation(NetMessage& message, NetConnection* fromConnection);
 bool OnWaiting(NetMessage& message, NetConnection* fromConnection);

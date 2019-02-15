@@ -193,6 +193,15 @@ GameState* GameState::GetTransitionGameState()
 	return g_transitionState;
 }
 
+//  =========================================================================================
+bool GameState::IsTransitioning()
+{
+	if(g_transitionState != nullptr)
+		return true;
+
+	return false;
+}
+
 //For now, we assume they will only ever have one of each possible type in the list  =========================================================================================
 GameState* GameState::GetGameStateFromGlobalListByType(eGameState gameStateType)
 {
