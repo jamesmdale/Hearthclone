@@ -59,11 +59,6 @@ void ReadyState::Update(float deltaSeconds)
 		GameState::TransitionGameStates(GetGameStateFromGlobalListByType(PLAYING_GAME_STATE));
 		break;
 	}
-
-	/*TODO("Setup state sending every frame");
-	Command setupStateCMD = Command("send_setup_state");
-	setupStateCMD.AppendString(GetMatchSetupStateAsString().c_str());
-	SendSetupState(setupStateCMD);*/
 }
 
 //  =========================================================================================
@@ -216,7 +211,7 @@ void ReadyState::LoadDecks()
 		m_matchSetupState = CONFIRMING;
 
 		Command sendReadyConfirmation = Command("send_ready_confirmation_gcmd");
-		SendReadyConfirmation(sendReadyConfirmation);
+		SendConnectionReadyConfirmation(sendReadyConfirmation);
 	}
 }
 

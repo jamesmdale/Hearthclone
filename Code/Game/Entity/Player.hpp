@@ -28,6 +28,7 @@ public:
 	void Update(float deltaSeconds);
 
 	void LoadDeckFromDefinitionName(const std::string& deckName);
+	void LoadDeckFromDefinition(DeckDefinition* deckDefinition);
 	void UpdateDeckCount();
 	void ShuffleDeck();
 

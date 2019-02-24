@@ -17,29 +17,80 @@ void RegisterGameMessages()
 	NetSession* theNetSession = NetSession::GetInstance();
 
 	//register all definitions;	
-	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex, "ping_gnm", OnGamePing, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
-	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 1, "ready_confirmation_gnm", OnReadyConfirmation, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
-	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 2, "waiting_for_update_gnm", OnWaiting, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
-	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 3, "playing_state_ready_gnm", OnPlayingStateReady, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
-	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 4, "send_deck_gnm", OnReceiveDeck, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
-	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 5, "draw_card_gnm", OnDrawCard, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
-	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 6, "play_card_gnm", OnPlayCard, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
-	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 7, "summon_character_gnm", OnSummonCharacter, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
-	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 8, "send_my_deck_definition_gnm", OnReceiveDeckDefinition, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
+	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex, "game_command_gnm", OnReceiveGameCommand, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
+	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 1, "ping_gnm", OnGamePing, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
+	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 2, "ready_confirmation_gnm", OnConnectionReadyConfirmation, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
+	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 3, "waiting_for_update_gnm", OnWaiting, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
+	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 4, "playing_state_ready_gnm", OnPlayingStateReady, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
+	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 5, "send_deck_gnm", OnReceiveDeck, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
+	theNetSession->RegisterMessageDefinition(g_startingNetRegistrationIndex + 9, "send_my_deck_definition_gnm", OnReceiveDeckDefinition, RELIABLE_INORDER_NET_MESSAGE_FLAG, 3);
 }
 
 //  =========================================================================================
 void RegisterGameCommands()
 {
+	RegisterCommand("send_game_command_gcmd", CommandRegistration(SendGameCommand, "", ""));
 	RegisterCommand("send_deck_gcmd", CommandRegistration(SendDeck, "", ""));
 	RegisterCommand("send_ping_gcmd", CommandRegistration(SendGamePing, "", ""));
-	RegisterCommand("send_ready_confirmation_gcmd", CommandRegistration(SendReadyConfirmation, "", ""));
+	RegisterCommand("send_ready_confirmation_gcmd", CommandRegistration(SendConnectionReadyConfirmation, "", ""));
+	RegisterCommand("send_playing_ready_gcmd", CommandRegistration(SendPlayingStateReady, "", ""));
 	RegisterCommand("send_waiting_gcmd", CommandRegistration(SendWaiting, "", ""));
 	RegisterCommand("send_draw_gcmd", CommandRegistration(SendDrawCard, "", ""));
 	RegisterCommand("send_play_card_gcmd", CommandRegistration(SendPlayCard, "", ""));
 	RegisterCommand("send_summon_character_gcmd", CommandRegistration(SendSummonCharacter, "", ""));
 	RegisterCommand("send_my_deck_definition_gcmd", CommandRegistration(SendMyDeckDefinition, "", ""));
 
+}
+
+//  =========================================================================================
+//GENERIC COMMANDS / GENERIC RECEIVE
+//  =========================================================================================
+void SendGameCommand(Command& cmd)
+{
+	//format
+	//uint actionRequestId
+	//std::string name of command
+	//parameters
+
+	// standard function setup ----------------------------------------------
+	NetSession* theNetSession = NetSession::GetInstance();
+	Game* theGame = Game::GetInstance();
+
+	PlayingState* playingState = (PlayingState*)GameState::GetCurrentGameState();
+	if (playingState->m_type != PLAYING_GAME_STATE)
+		return;
+
+	NetMessage* message = new NetMessage("send_game_command_gcmd");
+
+	//just write it all regardless how big it is. We will just read as much as we need when we process it.
+	std::string commandContentString = cmd.GetContentAsString();
+	message->WriteBytes(sizeof(commandContentString), &commandContentString, false);
+
+	theGame->m_enemyConnection->QueueMessage(message);
+}
+
+//  =========================================================================================
+bool OnReceiveGameCommand(NetMessage& message, NetConnection* fromConnection)
+{
+	char messageString[GAME_NET_MESSAGE_LENGTH];
+	Game* theGame = Game::GetInstance();
+
+	//if we already have their deck there is no reason to process this message
+	bool success = message.ReadBytes(&messageString, GAME_NET_MESSAGE_LENGTH, false);
+
+	if (!success)
+	{
+		DevConsolePrintf("Received ReceiveDeckDef function from connection %i. Could not read param1", fromConnection->GetConnectionIndex() );
+		ASSERT_OR_DIE(false, "Received ReceiveDeckDef function from connection %i. Could not read param1", fromConnection->GetConnectionIndex());
+		return false;
+	}
+
+	std::string commandString(messageString);
+	Command gameCommand = Command(commandString.c_str());
+
+	CommandRun(gameCommand);
+
+	return true;
 }
 
 //game commands =========================================================================================
@@ -104,7 +155,23 @@ void SendGamePing(Command& cmd)
 }
 
 //  =========================================================================================
-void SendReadyConfirmation(Command& cmd) 
+void SendPlayingStateReady(Command & cmd)
+{
+	// standard function setup ----------------------------------------------
+	NetSession* theNetSession = NetSession::GetInstance();
+	Game* theGame = Game::GetInstance();
+
+	PlayingState* playingState = (PlayingState*)GameState::GetCurrentGameState();
+	if (playingState->m_type != PLAYING_GAME_STATE)
+		return;
+
+	NetMessage* message = new NetMessage("playing_state_ready_gnm");
+
+	theGame->m_enemyConnection->QueueMessage(message);
+}
+
+//  =========================================================================================
+void SendConnectionReadyConfirmation(Command& cmd) 
 {
 	// standard function setup ----------------------------------------------
 	NetSession* theNetSession = NetSession::GetInstance();
@@ -117,8 +184,6 @@ void SendReadyConfirmation(Command& cmd)
 	NetMessage* message = new NetMessage("ready_confirmation_gnm");
 
 	theGame->m_enemyConnection->QueueMessage(message);
-
-	//readyState->m_isReadyConfirmationSent = true;
 }
 
 //  =========================================================================================
@@ -174,7 +239,7 @@ bool OnGamePing(NetMessage& message, NetConnection* fromConnection)
 }
 
 //  =========================================================================================
-bool OnReadyConfirmation(NetMessage& message, NetConnection* fromConnection)
+bool OnConnectionReadyConfirmation(NetMessage& message, NetConnection* fromConnection)
 {
 	NetSession* theNetSession = NetSession::GetInstance();
 	Game* theGame = Game::GetInstance();
@@ -197,7 +262,15 @@ bool OnWaiting(NetMessage& message, NetConnection* fromConnection)
 //  =========================================================================================
 bool OnPlayingStateReady(NetMessage& message, NetConnection* fromConnection)
 {
-	return false;
+	NetSession* theNetSession = NetSession::GetInstance();
+	Game* theGame = Game::GetInstance();
+
+	PlayingState* playingState = (PlayingState*)GameState::GetCurrentGameState();
+	if (playingState->m_type != PLAYING_GAME_STATE)
+		return false;
+
+
+	return true;
 }
 
 //  =========================================================================================
@@ -238,12 +311,6 @@ bool OnDrawCard(NetMessage& message, NetConnection* fromConnection)
 
 //  =========================================================================================
 bool OnPlayCard(NetMessage& message, NetConnection* fromConnection)
-{
-	return false;
-}
-
-//  =========================================================================================
-bool OnSummonCharacter(NetMessage& message, NetConnection* fromConnection)
 {
 	return false;
 }

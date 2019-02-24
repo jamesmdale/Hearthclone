@@ -129,6 +129,41 @@ void Player::LoadDeckFromDefinitionName(const std::string& deckName)
 }
 
 //  =========================================================================================
+void Player::LoadDeckFromDefinition(DeckDefinition* deckDefinition)
+{
+	// clear contents of current deck
+	if ((int)m_deck.size() > 0)
+	{
+		for (int cardIndex = 0; cardIndex < (int)m_deck.size(); ++cardIndex)
+		{
+			m_deck[cardIndex] = nullptr;
+		}
+		m_deck.clear();
+		m_deck.shrink_to_fit();
+	}
+
+	// load deck
+	for (int cardIndex = 0; cardIndex < (int)deckDefinition->m_cardNames.size(); ++cardIndex)
+	{
+		Card* cardToAdd = new Card(CardDefinition::GetDefinitionByName(deckDefinition->m_cardNames[cardIndex]));
+		cardToAdd->m_controller = m_playerId;
+		cardToAdd->m_renderScene = m_gameState->m_renderScene2D;
+		m_deck.push_back(cardToAdd);
+		cardToAdd = nullptr;
+	}
+
+	//load hero from deck
+	m_hero = new Hero(deckDefinition->m_heroDefinition, m_playerId);
+	m_hero->m_renderScene = m_gameState->m_renderScene2D;
+
+	m_heroPower = new HeroPower(deckDefinition->m_heroDefinition, m_playerId);
+	m_heroPower->m_renderScene = m_gameState->m_renderScene2D;
+
+	deckDefinition = nullptr;
+	UpdateDeckCount();
+}
+
+//  =========================================================================================
 void Player::UpdateDeckCount()
 {
 	if (m_deckCount > 0)

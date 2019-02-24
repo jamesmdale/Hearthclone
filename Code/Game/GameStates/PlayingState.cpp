@@ -75,6 +75,8 @@ void PlayingState::Initialize()
 	//setup network
 	m_isHosting = Game::GetInstance()->m_isHosting;
 
+	SetupPlayers();
+
 	if (m_isHosting)
 	{
 		SetupGameAsHost();
@@ -84,23 +86,21 @@ void PlayingState::Initialize()
 //  =============================================================================
 void PlayingState::Update(float deltaSeconds)
 { 
-	//process queues
-	ProcessEffectQueue();
-	ProcessRefereeQueue();
-
-	//if we are processing actions and effects, don't allow turn state to update.
-	if (GetEffectQueueCount() == 0 && GetRefereeQueueCount() == 0)
+	switch (m_currentMatchState)
 	{
-		//update turn state manager
-		m_turnStateManager->Update(deltaSeconds);
-	}	
-		
-	//update enemy
-	m_enemyPlayer->Update(deltaSeconds);
-
-	//update self
-	m_player->Update(deltaSeconds);
-
+	case SETTING_UP_MATCH_STATE:
+		UpdateSettingUpMatch(deltaSeconds);
+		break;
+	case PLAYING_MATCH_STATE:
+		UpdatePlaying(deltaSeconds);
+		break;
+	case WAITING_MATCH_STATE:
+		UpdateWaiting(deltaSeconds);
+		break;
+	case FINISHING_MATCH_STATE:
+		UpdateFinishing(deltaSeconds);
+		break;
+	}
 }
 
 //  =============================================================================
@@ -139,6 +139,90 @@ float PlayingState::UpdateFromInput(float deltaSeconds)
 
 	// return 
 	return deltaSeconds; //new deltaSeconds
+}
+
+//  =========================================================================================
+void PlayingState::UpdateSettingUpMatch(float deltaSeconds)
+{
+	UNUSED(deltaSeconds);
+	if (!m_isHosting)
+	{
+		if (m_activePlayer != nullptr && m_areDecksShuffled)
+		{
+			m_currentMatchState = PLAYING_MATCH_STATE;
+		}
+	}
+	else
+	{
+		//SetupMatch()
+	}
+}
+
+//  ======================================================================R/G===================
+void PlayingState::UpdateWaiting(float deltaSeconds)
+{
+
+}
+
+//  =========================================================================================
+void PlayingState::UpdatePlaying(float deltaSeconds)
+{
+	//process queues
+	ProcessEffectQueue();
+	ProcessRefereeQueue();
+
+	//if we are processing actions and effects, don't allow turn state to update.
+	if (GetEffectQueueCount() == 0 && GetRefereeQueueCount() == 0)
+	{
+		//update turn state manager
+		m_turnStateManager->Update(deltaSeconds);
+	}	
+
+	//update enemy
+	m_enemyPlayer->Update(deltaSeconds);
+
+	//update self
+	m_player->Update(deltaSeconds);
+}
+
+//  =========================================================================================
+void PlayingState::UpdateFinishing(float deltaSeconds)
+{
+	UNUSED(deltaSeconds);
+}
+
+//  =========================================================================================
+void PlayingState::SetupGameAsHost()
+{
+	FlipCoin() ? m_activePlayer = m_player : m_activePlayer = m_enemyPlayer;
+
+	//send out decklists
+	m_player->ShuffleDeck();	
+	m_enemyPlayer->ShuffleDeck();
+
+	//send deck order after shuffling
+
+	//send which player goes first
+}
+
+//  =========================================================================================
+void PlayingState::SetupPlayers()
+{
+	Game* theGame = Game::GetInstance();
+
+	m_player->Initialize();
+	m_enemyPlayer->Initialize();
+
+	m_player->LoadDeckFromDefinition(theGame->m_playerLoadedDeckDefinition);
+	m_enemyPlayer->LoadDeckFromDefinition(theGame->m_enemyLoadedDeckDefinition);
+}
+
+//  =========================================================================================
+void PlayingState::CompleteMatchSetup()
+{
+	//update board dynamic renderables
+	m_gameBoard->RefreshEndTurnWidget();
+	m_gameBoard->RefreshPlayerManaWidget();
 }
 
 //  =============================================================================
@@ -279,30 +363,6 @@ Character* PlayingState::GetSelectedCharacter(const std::vector<Character*>& wid
 	return selectedWidget;
 }
 
-//  =========================================================================================
-void PlayingState::SetupGameAsHost()
-{
-	FlipCoin() ? m_activePlayer = m_player : m_activePlayer = m_enemyPlayer;
-
-	//load decks
-	//shuffle decks
-}
-
-//  =========================================================================================
-void PlayingState::SetupPlayers()
-{
-	m_player->LoadDeckFromDefinitionName("All Yeti");
-	m_player->Initialize();
-
-	m_enemyPlayer->LoadDeckFromDefinitionName("All Yetis Lock");
-	m_enemyPlayer->Initialize();
-
-	m_activePlayer = m_player;
-
-	//update board dynamic renderables
-	m_gameBoard->RefreshEndTurnWidget();
-	m_gameBoard->RefreshPlayerManaWidget();
-}
 
 //  =============================================================================
 Character* PlayingState::GetCharacterById(int characterId)

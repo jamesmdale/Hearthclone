@@ -8,6 +8,16 @@ class Board;
 class TurnStateManager;
 class Player;
 class Tank;
+
+enum eMatchStates
+{
+	SETTING_UP_MATCH_STATE,
+	PLAYING_MATCH_STATE,
+	WAITING_MATCH_STATE,
+	FINISHING_MATCH_STATE,
+	NUM_MATCH_STATES
+};
+
 class PlayingState : public GameState
 {
 public:
@@ -28,18 +38,28 @@ public:
 	virtual void PostRender() override;
 	virtual float UpdateFromInput(float deltaSeconds) override;
 
-	//playing state specific methods
+	void UpdateSettingUpMatch(float deltaSeconds);
+	void UpdateWaiting(float deltaSeconds);
+	void UpdatePlaying(float deltaSeconds);
+	void UpdateFinishing(float deltaSeconds);
+
+	//setup methods
+	void SetupGameAsHost();
+	void SetupPlayers();
+	void CompleteMatchSetup();
+
+	// playing state specific methods ----------------------------------------------
 	bool GetInteractableWidgets(std::vector<Widget*>& outWidgets);
 	Widget* GetSelectedWidget(const std::vector<Widget*>& widgets);
 
 	bool GetCharacterWidgets(std::vector<Character*>& outCharacters);
 	Character* GetSelectedCharacter(const std::vector<Character*>& widgets);
-
-	void SetupGameAsHost();
-	void SetupPlayers();
 	Character* GetCharacterById(int characterId);
 
+
 public:
+	eMatchStates m_currentMatchState = SETTING_UP_MATCH_STATE;
+
 	Board* m_gameBoard = nullptr;
 
 	Stopwatch* m_gameTime = nullptr;
@@ -56,7 +76,8 @@ public:
 	int m_turnCount;
 
 	bool m_isHosting = false;
+	bool m_areDecksShuffled = false;
 
-	//MatchLog
+	//TODO : MatchLog
 };
 
