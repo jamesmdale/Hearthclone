@@ -164,21 +164,21 @@ void TurnStateManager::TransitionInStartOfGame()
 	if (randomStart >= 0.5f)
 	{
 		m_playingState->m_activePlayer = m_playingState->m_player;
-		playerStartingCards = 3;
-		enemyStartingCards = 4;
+		playerStartingCards = g_startingCardsForActivePlayer;
+		enemyStartingCards = g_startingCardsForIdlePlayer;
 	}
 	else
 	{
 		m_playingState->m_activePlayer = m_playingState->m_enemyPlayer;
-		playerStartingCards = 4;
-		enemyStartingCards = 3;
+		playerStartingCards = g_startingCardsForIdlePlayer;
+		enemyStartingCards = g_startingCardsForActivePlayer;
 	}
 
-	//each player draws 3 cards
+	//each player draws cards (3 if going first...4 otherwise)
 	std::map<std::string, std::string> parameters = {{"targetId", Stringf("%i", m_playingState->m_player->m_hero->m_characterId)}, {"amount", Stringf("%i", playerStartingCards).c_str()}};
 	AddActionToRefereeQueue("draw", parameters);
 
-	//each player draws 3 cards
+	//each player draws cards (3 if going first...4 otherwise)
 	parameters = {{"targetId", Stringf("%i", m_playingState->m_enemyPlayer->m_hero->m_characterId)}, {"amount", Stringf("%i", playerStartingCards).c_str()}};
 	AddActionToRefereeQueue("draw", parameters);
 

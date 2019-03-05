@@ -173,11 +173,17 @@ void Player::UpdateDeckCount()
 //  =========================================================================================
 void Player::ShuffleDeck()
 {
+	RNG* theRNG = Game::GetGlobalRNG();
+
+	//no need to shuffle
+	if(m_deck.size() <= 1)
+		return;
+
 	//not totally random would need to revisit this, but will do for now.
 	for (int shuffleCount = 0; shuffleCount < (int)m_deck.size(); ++shuffleCount)
 	{
-		int swapVal = GetRandomIntInRange(0, (int)m_deck.size() - 1);
-		int swapVal2 = GetRandomIntInRange(0, (int)m_deck.size() - 1);
+		uint swapVal = (int)theRNG->GetRandomUintInRange(0, (uint)m_deck.size() - 1);
+		uint swapVal2 = (int)theRNG->GetRandomUintInRange(0, (uint)m_deck.size() - 1);
 		Card* tempCard = nullptr;
 
 		// swap cards around in array

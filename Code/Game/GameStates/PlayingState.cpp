@@ -144,21 +144,11 @@ float PlayingState::UpdateFromInput(float deltaSeconds)
 //  =========================================================================================
 void PlayingState::UpdateSettingUpMatch(float deltaSeconds)
 {
+	//we just sit and spin in this state until the other person tells us we are ready to move on. 
 	UNUSED(deltaSeconds);
-	if (!m_isHosting)
-	{
-		if (m_activePlayer != nullptr && m_areDecksShuffled)
-		{
-			m_currentMatchState = PLAYING_MATCH_STATE;
-		}
-	}
-	else
-	{
-		//SetupMatch()
-	}
 }
 
-//  ======================================================================R/G===================
+//  ==========================================================================================
 void PlayingState::UpdateWaiting(float deltaSeconds)
 {
 
@@ -194,15 +184,40 @@ void PlayingState::UpdateFinishing(float deltaSeconds)
 //  =========================================================================================
 void PlayingState::SetupGameAsHost()
 {
-	FlipCoin() ? m_activePlayer = m_player : m_activePlayer = m_enemyPlayer;
+	bool isHostFirstToAct = Game::GetGlobalRNG()->FlipCoin();
+	isHostFirstToAct ? m_activePlayer = m_player : m_activePlayer = m_enemyPlayer;
 
-	//send out decklists
-	m_player->ShuffleDeck();	
-	m_enemyPlayer->ShuffleDeck();
+	// This code garrauntees uniformity across the network so all of our following random generation order will be correct
+	//after assigning who is active first we can now just trust ACTIVEPLAYER and IDLEPLAYER to determine who can act
+	if (isHostFirstToAct)
+	{
+		if (m_isHosting)
+		{
+			m_activePlayer = m_player;
+			m_idlePlayer = m_enemyPlayer;
+		}
+		else
+		{
+			m_activePlayer = m_enemyPlayer;
+			m_idlePlayer = m_player;
+		}
+	}
+	else
+	{
+		if (m_isHosting)
+		{
+			m_activePlayer = m_enemyPlayer;
+			m_idlePlayer = m_player;
+		}
+		else
+		{
+			m_activePlayer = m_player;
+			m_idlePlayer = m_enemyPlayer;
+		}
+	}
 
-	//send deck order after shuffling
-
-	//send which player goes first
+	m_activePlayer->ShuffleDeck();
+	m_idlePlayer->ShuffleDeck();
 }
 
 //  =========================================================================================
@@ -244,7 +259,6 @@ bool PlayingState::GetInteractableWidgets(std::vector<Widget*>& outWidgets)
 	//add hero widget
 	outWidgets.push_back(m_player->m_hero);
 	outWidgets.push_back(m_player->m_heroPower);
-
 
 	// enemy player 
 	//add widgets from enemy player's hand

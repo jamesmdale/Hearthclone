@@ -3,6 +3,7 @@
 #include "Game\Entity\Character.hpp"
 #include "Engine\Time\Stopwatch.hpp"
 #include "Engine\Core\Widget.hpp"
+#include "Engine\Math\RNG.hpp"
 
 class Board;
 class TurnStateManager;
@@ -65,19 +66,20 @@ public:
 	Stopwatch* m_gameTime = nullptr;
 
 	//player contains hand, graveyard, their side of the battlefield, and their class
-	Player* m_player = nullptr;
-	Player* m_enemyPlayer = nullptr; 
-
-	Widget* m_currentSelectedWidget = nullptr;
-
-	TurnStateManager* m_turnStateManager = nullptr;
-	
 	Player* m_activePlayer = nullptr;
-	int m_turnCount;
+	Player* m_idlePlayer = nullptr;
 
+	Player* m_player = nullptr;
+	Player* m_enemyPlayer = nullptr;
+	Widget* m_currentSelectedWidget = nullptr;
+	TurnStateManager* m_turnStateManager = nullptr;	
+
+	int m_turnCount;
 	bool m_isHosting = false;
-	bool m_areDecksShuffled = false;
 
 	//TODO : MatchLog
+
+	//TODO : Modifies random
+	int m_matchRandomSeed = 0;
 };
 

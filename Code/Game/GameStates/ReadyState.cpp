@@ -194,9 +194,7 @@ void ReadyState::SetupNetwork()
 	if (IsNetworkSetupComplete())
 	{
 		m_matchSetupState = LOADING_DECK;
-
-		Command sendDeckDefCMD = Command("send_my_deck_definition_gnm");
-		SendMyDeckDefinition(sendDeckDefCMD);
+		SendDeckDefinition();
 	}
 }
 
@@ -210,8 +208,7 @@ void ReadyState::LoadDecks()
 	{
 		m_matchSetupState = CONFIRMING;
 
-		Command sendReadyConfirmation = Command("send_ready_confirmation_gcmd");
-		SendConnectionReadyConfirmation(sendReadyConfirmation);
+		SendReadyConfirmation();
 	}
 }
 
@@ -291,6 +288,36 @@ void ReadyState::SetupClient()
 	std::string addressString = Stringf("%s:%s", Game::GetInstance()->m_hostAddress.c_str(), ToString(g_defaultPort).c_str());
 	joinCommand.AppendString(addressString.c_str());
 	CommandRun(joinCommand);
+}
+
+//  =========================================================================================
+void ReadyState::SendDeckDefinition()
+{
+	Command cmd = Command("send_game_cmd");
+
+	//get my loaded deck definition name
+	char deckDefinitionName[g_maxNetStringBytes];
+	strcpy_s(deckDefinitionName, Game::GetInstance()->m_playerLoadedDeckDefinition->m_deckName.c_str());
+
+	uint16 netGameCmdId = GetNetGameCommandIdByName("receive_deck_def");
+
+	//construct command
+	cmd.AppendInt(netGameCmdId);
+	cmd.AppendString(deckDefinitionName);
+	
+	CommandRun(cmd);
+}
+
+//  =========================================================================================
+void ReadyState::SendReadyConfirmation()
+{
+	Command cmd = Command("send_game_cmd");
+
+	//construct command
+	uint16 netGameCmdId = GetNetGameCommandIdByName("receive_ready");
+	cmd.AppendInt(netGameCmdId);
+
+	CommandRun(cmd);
 }
 
 //  =========================================================================================

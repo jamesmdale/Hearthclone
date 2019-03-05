@@ -1,3 +1,4 @@
+#include "..\..\Engine\Code\Engine\Math\RNG.hpp"
 #include <stdlib.h>
 #include "Game\Game.hpp"
 #include "Game\Definitions\DeckDefinition.hpp"
@@ -29,11 +30,13 @@
 #include "Engine\Net\NetSession.hpp"
 #include "Engine\Net\NetConnection.hpp"
 #include "Engine\Net\NetMessage.hpp"
+#include "Engine\Math\RNG.hpp"
 #include <vector>
 #include <string>
 
 //game instance
 static Game* g_theGame = nullptr;
+static RNG* g_randomGenerator = nullptr;
 
 bool m_isPaused = false;
 
@@ -74,9 +77,23 @@ Game* Game::CreateInstance()
 	if (g_theGame == nullptr)
 	{
 		g_theGame = new Game();
+		g_randomGenerator = new RNG();
 	}
 
 	return g_theGame;
+}
+
+//  =========================================================================================
+RNG* Game::GetGlobalRNG()
+{
+	return g_randomGenerator;
+}
+
+//  =========================================================================================
+void Game::ResetGlobalRNG()
+{
+	g_randomGenerator->ResetPosition();
+	g_randomGenerator->ResetSeed();
 }
 
 //  =========================================================================================
@@ -100,9 +117,10 @@ void Game::Initialize()
 	RegisterCommand("load_deck", CommandRegistration(LoadDeck, ": Attempt to load a deck from the Decks.xml file (string deckname)", ""));
 	RegisterCommand("change_host", CommandRegistration(ChangeHost, ": change the intended host to join (string ip address)", ""));
 
-	//net message registration
+	//game command/netmessages/netcommand registration
 	RegisterGameMessages();
 	RegisterGameCommands();
+	RegisterGameNetCommands();
 
 	// add cameras
 	m_gameCamera = new Camera();

@@ -10,6 +10,7 @@
 
 class NetMessage;
 class NetConnection;
+class RNG;
 enum eNetMessageFlag;
 
 enum eGameNetMessageType
@@ -30,6 +31,8 @@ public:
 	~Game();
 	static Game* GetInstance();
 	static Game* CreateInstance();
+	static RNG* GetGlobalRNG();
+	static void ResetGlobalRNG();
 
 	void Initialize();
 
@@ -69,7 +72,6 @@ public:
 
 	std::string m_hostAddress = "";
 	Stopwatch* m_reliableSendTimer = nullptr;
-	
 };
 
 //game commands

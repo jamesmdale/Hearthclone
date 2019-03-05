@@ -1,4 +1,4 @@
-change_host 192.168.2.184
+change_host 192.168.2.106
 change_host 10.8.148.247
 load_deck "All_Yetis"
 spawn_process 1

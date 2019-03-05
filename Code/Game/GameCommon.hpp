@@ -35,6 +35,9 @@ constexpr int g_deckSize = 30;
 constexpr int g_maxHandSize = 11;
 constexpr int g_maxMinionCount = 7;
 
+constexpr int g_startingCardsForActivePlayer = 3;
+constexpr int g_startingCardsForIdlePlayer = 4;
+
 
 // net details ----------------------------------------------
 constexpr size_t g_maxNetStringBytes = 16;

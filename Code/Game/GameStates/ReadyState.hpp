@@ -51,6 +51,9 @@ public:
 	void SetupHost();
 	void SetupClient();
 
+	//net helpers
+	void SendDeckDefinition();
+	void SendReadyConfirmation();
 	std::string GetConnectionStateAsText();
 
 public:
