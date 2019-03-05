@@ -207,7 +207,6 @@ void ReadyState::LoadDecks()
 	if (AreDecksLoaded())
 	{
 		m_matchSetupState = CONFIRMING;
-
 		SendReadyConfirmation();
 	}
 }
@@ -296,14 +295,13 @@ void ReadyState::SendDeckDefinition()
 	Command cmd = Command("send_game_cmd");
 
 	//get my loaded deck definition name
-	char deckDefinitionName[g_maxNetStringBytes];
-	strcpy_s(deckDefinitionName, Game::GetInstance()->m_playerLoadedDeckDefinition->m_deckName.c_str());
+	std::string deckDefinitionName = Stringf("\"%s\"", Game::GetInstance()->m_playerLoadedDeckDefinition->m_deckName.c_str());
 
 	uint16 netGameCmdId = GetNetGameCommandIdByName("receive_deck_def");
 
 	//construct command
 	cmd.AppendInt(netGameCmdId);
-	cmd.AppendString(deckDefinitionName);
+	cmd.AppendString(deckDefinitionName.c_str());
 	
 	CommandRun(cmd);
 }

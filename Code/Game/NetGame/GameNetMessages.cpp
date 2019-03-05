@@ -90,7 +90,7 @@ bool ReceiveDeckDefinition(GameNetCommand& cmd, NetConnection* fromConnection)
 	Game* theGame = Game::GetInstance();
 
 	//we only care about receiving deck definitions from the enemy
-	if(fromConnection == nullptr || fromConnection != theGame->m_enemyConnection)
+	if(fromConnection == nullptr)// || fromConnection != theGame->m_enemyConnection)
 		return false;
 
 	//we already have their deck definition
@@ -115,7 +115,7 @@ bool ReceiveReadyConfirmation(GameNetCommand& cmd, NetConnection* fromConnection
 	Game* theGame = Game::GetInstance();
 
 	//we only care about receiving deck ready confirmations from the enemy
-	if(fromConnection == nullptr || fromConnection != theGame->m_enemyConnection)
+	if(fromConnection == nullptr)// || fromConnection != theGame->m_enemyConnection)
 		return false;	
 
 	ReadyState* readyState = (ReadyState*)GameState::GetCurrentGameState();

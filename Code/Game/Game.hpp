@@ -72,6 +72,7 @@ public:
 
 	std::string m_hostAddress = "";
 	Stopwatch* m_reliableSendTimer = nullptr;
+	Stopwatch* m_netResendTimer = nullptr;
 };
 
 //game commands

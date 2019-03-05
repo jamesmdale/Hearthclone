@@ -154,6 +154,9 @@ void Game::Initialize()
 	m_reliableSendTimer = new Stopwatch(GetMasterClock());
 	m_reliableSendTimer->SetTimerInMilliseconds(100.f);
 
+	m_netResendTimer = new Stopwatch(GetMasterClock());
+	m_netResendTimer->SetTimerInMilliseconds(100.f);
+
 	// cleanup
 	theRenderer = nullptr;
 	theWindow = nullptr;
@@ -214,24 +217,24 @@ float Game::UpdateInput(float deltaSeconds)
 void Game::TestReliableSend()
 {
 	//test reliable send
-	if (m_reliableSendTimer->CheckAndReset())
-	{
-		NetSession* theNetSession = NetSession::GetInstance();
+	//if (m_reliableSendTimer->CheckAndReset())
+	//{
+	//	NetSession* theNetSession = NetSession::GetInstance();
 
-		for (int connectionIndex = 0; connectionIndex < MAX_NUM_NET_CONNECTIONS; ++connectionIndex)
-		{
-			if (theNetSession->m_boundConnections[connectionIndex] != nullptr)
-			{
-				NetMessage* message = new NetMessage("net_reliable_test");
+	//	for (int connectionIndex = 0; connectionIndex < MAX_NUM_NET_CONNECTIONS; ++connectionIndex)
+	//	{
+	//		if (theNetSession->m_boundConnections[connectionIndex] != nullptr)
+	//		{
+	//			NetMessage* message = new NetMessage("net_reliable_test");
 
-				theNetSession->m_boundConnections[connectionIndex]->QueueMessage(message);
-				message = nullptr;
-			}			
-		}
+	//			theNetSession->m_boundConnections[connectionIndex]->QueueMessage(message);
+	//			message = nullptr;
+	//		}			
+	//	}
 
-		//cleanup
-		theNetSession = nullptr;
-	}
+	//	//cleanup
+	//	theNetSession = nullptr;
+	//}
 }
 
 //  =========================================================================================
