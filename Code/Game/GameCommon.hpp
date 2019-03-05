@@ -38,11 +38,11 @@ constexpr int g_maxMinionCount = 7;
 constexpr int g_startingCardsForActivePlayer = 3;
 constexpr int g_startingCardsForIdlePlayer = 4;
 
-
 // net details ----------------------------------------------
 constexpr size_t g_maxNetStringBytes = 16;
 constexpr int g_defaultPort = 10084;
 constexpr int g_startingNetRegistrationIndex = 100;
+constexpr char* g_sendGameCommand = "send_game_cmd";
 
 // class colors ----------------------------------------------
 extern Rgba g_druidClassColor;

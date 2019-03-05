@@ -292,7 +292,7 @@ void ReadyState::SetupClient()
 //  =========================================================================================
 void ReadyState::SendDeckDefinition()
 {
-	Command cmd = Command("send_game_cmd");
+	Command cmd = Command(g_sendGameCommand);
 
 	//get my loaded deck definition name
 	std::string deckDefinitionName = Stringf("\"%s\"", Game::GetInstance()->m_playerLoadedDeckDefinition->m_deckName.c_str());
@@ -309,7 +309,7 @@ void ReadyState::SendDeckDefinition()
 //  =========================================================================================
 void ReadyState::SendReadyConfirmation()
 {
-	Command cmd = Command("send_game_cmd");
+	Command cmd = Command(g_sendGameCommand);
 
 	//construct command
 	uint16 netGameCmdId = GetNetGameCommandIdByName("receive_ready");

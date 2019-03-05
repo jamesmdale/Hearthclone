@@ -24,7 +24,7 @@ void RegisterGameMessages()
 //  =========================================================================================
 void RegisterGameCommands()
 {
-	RegisterCommand("send_game_cmd", CommandRegistration(SendGameCommand, "", ""));
+	RegisterCommand(g_sendGameCommand, CommandRegistration(SendGameCommand, "", ""));
 }
 
 //  =========================================================================================
@@ -33,6 +33,7 @@ void RegisterGameNetCommands()
 	uint16 id = GetNumRegisteredGameNetCommands();
 	RegisterGameNetCommand(id, GameNetCommandRegistration(ReceiveDeckDefinition, "receive_deck_def"));
 	RegisterGameNetCommand(id + 1, GameNetCommandRegistration(ReceiveReadyConfirmation, "receive_ready"));
+	RegisterGameNetCommand(id + 2, GameNetCommandRegistration(ReceiveInitialActivePlayer, "establish_initial_active_player"));
 }
 
 //  =========================================================================================
@@ -125,4 +126,10 @@ bool ReceiveReadyConfirmation(GameNetCommand& cmd, NetConnection* fromConnection
 	readyState->m_enemyMatchSetupState = READY;
 
 	return true;
+}
+
+//  =========================================================================================
+bool ReceiveInitialActivePlayer(GameNetCommand & cmd, NetConnection * fromConnection)
+{
+	return false;
 }

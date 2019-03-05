@@ -18,6 +18,7 @@ bool OnReceiveGameCommand(NetMessage& message, NetConnection* fromConnection);
 //receive commands
 bool ReceiveDeckDefinition(GameNetCommand& cmd, NetConnection* fromConnection);
 bool ReceiveReadyConfirmation(GameNetCommand& cmd, NetConnection* fromConnection);
+bool ReceiveInitialActivePlayer(GameNetCommand& cmd, NetConnection* fromConnection);
 
 
 

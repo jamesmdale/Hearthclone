@@ -77,10 +77,10 @@ void PlayingState::Initialize()
 
 	SetupPlayers();
 
-	if (m_isHosting)
-	{
-		SetupGameAsHost();
-	}
+	//if (m_isHosting)
+	//{
+	SetupGameAsHost();
+	//}
 }
 
 //  =============================================================================
@@ -218,6 +218,15 @@ void PlayingState::SetupGameAsHost()
 
 	m_activePlayer->ShuffleDeck();
 	m_idlePlayer->ShuffleDeck();
+
+	//send turn order
+	/*Command turnOrderCommand = Command(g_sendGameCommand);
+	turnOrderCommand.AppendString("establish_initial_active_player");
+	turnOrderCommand.AppendBool(isHostFirstToAct);
+	CommandRun(turnOrderCommand);*/
+
+	CompleteMatchSetup();
+	m_currentMatchState = PLAYING_MATCH_STATE;
 }
 
 //  =========================================================================================
@@ -225,11 +234,11 @@ void PlayingState::SetupPlayers()
 {
 	Game* theGame = Game::GetInstance();
 
-	m_player->Initialize();
-	m_enemyPlayer->Initialize();
-
 	m_player->LoadDeckFromDefinition(theGame->m_playerLoadedDeckDefinition);
 	m_enemyPlayer->LoadDeckFromDefinition(theGame->m_enemyLoadedDeckDefinition);
+
+	m_player->Initialize();
+	m_enemyPlayer->Initialize();	
 }
 
 //  =========================================================================================
