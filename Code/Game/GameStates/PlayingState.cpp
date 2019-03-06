@@ -15,6 +15,7 @@
 #include "Engine\Debug\DebugRender.hpp"
 #include "Engine\Core\StringUtils.hpp"
 #include "Engine\Math\MathUtils.hpp"
+#include "Engine\Core\DevConsole.hpp"
 #include <map>
 #include <string>
 
@@ -227,6 +228,9 @@ void PlayingState::SetupGameAsHost()
 
 	CompleteMatchSetup();
 	m_currentMatchState = PLAYING_MATCH_STATE;
+
+	m_activePlayer == m_player ? DevConsolePrintf("MY TURN") : DevConsolePrintf("ENEMY TURN");
+	DevConsolePrintf("RNG SYNC: %i", Game::GetGlobalRNG()->)
 }
 
 //  =========================================================================================

@@ -18,18 +18,20 @@ Rgba playerPortraitColor = Rgba::BLUE;
 Rgba heroAbilityColor = Rgba::ORANGE;
 Rgba heroWeaponColor = Rgba(75, 75, 75, 255);
 
+//  =========================================================================================
 Board::Board()
 {
 	UpdateSortLayer(g_defaultBoardSortLayer);
 }
 
-
+//  =========================================================================================
 Board::~Board()
 {
 	m_endTurnWidget = nullptr;
 	m_playerManaWidget = nullptr;
 }
 
+//  =========================================================================================
 void Board::Initialize()
 {
 	Renderer* theRenderer = Renderer::GetInstance();	
@@ -79,7 +81,7 @@ void Board::Initialize()
 	UpdateSortLayer(GetSortLayer());
 }
 
-
+//  =========================================================================================
 void Board::CreateBoardMeshesForRenderable(Renderable2D* renderable)
 {
 	Renderer* theRenderer = Renderer::GetInstance();
@@ -201,6 +203,7 @@ void Board::CreateBoardMeshesForRenderable(Renderable2D* renderable)
 	theRenderer = nullptr;
 }
 
+//  =========================================================================================
 void Board::CreateBoardTexturedMeshesForRenderable(Renderable2D * renderable)
 {
 	Renderer* theRenderer = Renderer::GetInstance();
@@ -239,7 +242,6 @@ void Board::CreateBoardTexturedMeshesForRenderable(Renderable2D * renderable)
 }
 
 // widget =========================================================================================
-
 void Board::RefreshEndTurnWidget()
 {
 	Renderer* theRenderer = Renderer::GetInstance();
@@ -311,6 +313,7 @@ void Board::RefreshEndTurnWidget()
 	theRenderer = nullptr;
 }
 
+//  =========================================================================================
 void Board::RefreshPlayerManaWidget()
 {
 	Renderer* theRenderer = Renderer::GetInstance();	
