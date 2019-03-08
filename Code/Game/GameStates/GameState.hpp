@@ -37,7 +37,8 @@ public:
 	virtual void ResetState();
 	virtual void Initialize();
 
-	bool IsInitialized(){return m_isInitialized;}
+	inline bool IsInitialized(){ return m_isInitialized; }
+	inline eGameState GetType(){ return m_type; }
 
 	//static methods
 	static void UpdateGlobalGameState(float deltaSeconds);
@@ -48,6 +49,7 @@ public:
 
 	static GameState* GetCurrentGameState();
 	static GameState* GetTransitionGameState();
+	static eGameState GetCurrentStateType();
 
 	static bool IsTransitioning();
 
@@ -65,8 +67,6 @@ protected:
 private:
 	static void FinishTransition();
 	
-protected:
-	bool m_isInitialized = false;	
 
 public:
 	eGameState m_type = NONE_GAME_STATE;
@@ -75,11 +75,15 @@ public:
 
 	bool m_doesResetOnTransition = true;	
 
+protected:
+	bool m_isInitialized = false;	
+
 private:
 	static float s_secondsInState;
 	static float s_secondsTransitioning;
 	static bool s_isFinishedTransitioningOut;
 	static bool s_isFinishedTransitioningIn;
+
 	static std::vector<GameState*> s_gameStates;
 };
 

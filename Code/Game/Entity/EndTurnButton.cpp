@@ -9,7 +9,7 @@ EndTurnButton::~EndTurnButton()
 
 void EndTurnButton::OnLeftClicked()
 {
-	std::map<std::string, std::string> parameters;
+	std::map<std::string, std::string> parameters = { {"shouldSendToOpponent", "true"} };
 
 	//call end turn
 	AddActionToRefereeQueue("end_turn", parameters);

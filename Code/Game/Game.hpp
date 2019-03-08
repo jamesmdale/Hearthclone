@@ -54,7 +54,7 @@ public:
 
 public:
 	//camera members
-	Camera * m_gameCamera = nullptr;
+	Camera* m_gameCamera = nullptr;
 
 	//rendering members
 	ForwardRenderingPath2D* m_forwardRenderingPath2D = nullptr;

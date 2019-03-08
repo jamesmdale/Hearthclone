@@ -194,6 +194,12 @@ GameState* GameState::GetTransitionGameState()
 }
 
 //  =========================================================================================
+eGameState GameState::GetCurrentStateType()
+{
+	return GetCurrentGameState()->GetType();
+}
+
+//  =========================================================================================
 bool GameState::IsTransitioning()
 {
 	if(g_transitionState != nullptr)

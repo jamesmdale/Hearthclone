@@ -47,8 +47,7 @@ public:
 	AABB2 m_playerDeckQuad;
 
 	// shared board quads =========================================================================================
-	AABB2 m_endTurnQuad;
-	
+	AABB2 m_endTurnQuad;	
 };
 
 

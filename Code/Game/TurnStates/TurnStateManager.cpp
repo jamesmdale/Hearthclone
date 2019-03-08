@@ -158,28 +158,16 @@ void TurnStateManager::Transition()
 
 void TurnStateManager::TransitionInStartOfGame()
 {
-	int randomStart = GetRandomFloatInRange(0.f, 1.f);
-	int playerStartingCards = 0;
-	int enemyStartingCards = 0;
-	if (randomStart >= 0.5f)
-	{
-		m_playingState->m_activePlayer = m_playingState->m_player;
-		playerStartingCards = g_startingCardsForActivePlayer;
-		enemyStartingCards = g_startingCardsForIdlePlayer;
-	}
-	else
-	{
-		m_playingState->m_activePlayer = m_playingState->m_enemyPlayer;
-		playerStartingCards = g_startingCardsForIdlePlayer;
-		enemyStartingCards = g_startingCardsForActivePlayer;
-	}
+	m_playingState->m_activePlayer = m_playingState->m_player;
+	int activePlayerStartingCards = g_startingCardsForActivePlayer;
+	int idlePlayerStartingCards = g_startingCardsForIdlePlayer;
 
 	//each player draws cards (3 if going first...4 otherwise)
-	std::map<std::string, std::string> parameters = {{"targetId", Stringf("%i", m_playingState->m_player->m_hero->m_characterId)}, {"amount", Stringf("%i", playerStartingCards).c_str()}};
+	std::map<std::string, std::string> parameters = {{"targetId", Stringf("%i", m_playingState->m_player->m_hero->m_characterId)}, {"amount", Stringf("%i", activePlayerStartingCards).c_str()}};
 	AddActionToRefereeQueue("draw", parameters);
 
 	//each player draws cards (3 if going first...4 otherwise)
-	parameters = {{"targetId", Stringf("%i", m_playingState->m_enemyPlayer->m_hero->m_characterId)}, {"amount", Stringf("%i", playerStartingCards).c_str()}};
+	parameters = {{"targetId", Stringf("%i", m_playingState->m_enemyPlayer->m_hero->m_characterId)}, {"amount", Stringf("%i", activePlayerStartingCards).c_str()}};
 	AddActionToRefereeQueue("draw", parameters);
 
 	isFinishedTransitioningIn = true;
@@ -312,10 +300,13 @@ float TurnStateManager::UpdateInputStartOfTurn(float deltaSeconds)
 
 float TurnStateManager::UpdateInputMain(float deltaSeconds)
 {
+	//if we aren't the active player don't update input.
+	if(m_playingState->m_activePlayer != m_playingState->m_player)
+		return deltaSeconds;
+
 	InputSystem* theInput = InputSystem::GetInstance();
 	std::string mouseText = "NONE";
-
-	Vector2 mouseCoordinates = theInput->GetMouse()->GetInvertedMouseClientPosition();
+	
 	std::vector<Widget*> interactableWidgets;
 	m_playingState->GetInteractableWidgets(interactableWidgets);
 
@@ -381,8 +372,6 @@ float TurnStateManager::UpdateInputMain(float deltaSeconds)
 				currentSelectedWidget->OnRightClicked();
 		}
 	}
-
-	DebugRender::GetInstance()->CreateDebugText2D(Vector2(Window::GetInstance()->m_clientWidth - 300, Window::GetInstance()->m_clientHeight - 20), 20.f, 1.f, Stringf("%f, %f", mouseCoordinates.x, mouseCoordinates.y).c_str(), Rgba::WHITE, Rgba::WHITE, 0.f, ALWAYS_DEPTH_TYPE);
 
 	// cleanup
 	for (int widgetIndex = 0; widgetIndex < (int)interactableWidgets.size(); ++widgetIndex)

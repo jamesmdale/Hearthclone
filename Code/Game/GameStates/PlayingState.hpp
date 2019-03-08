@@ -57,7 +57,6 @@ public:
 	Character* GetSelectedCharacter(const std::vector<Character*>& widgets);
 	Character* GetCharacterById(int characterId);
 
-
 public:
 	eMatchStates m_currentMatchState = SETTING_UP_MATCH_STATE;
 

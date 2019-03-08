@@ -41,11 +41,9 @@ public:
 
 	//hand utilities
 	void RemoveCardFromHand(int cardIndex);
-	//void MoveCardToGraveyard(int cardIndex);
 
 	//battlefield utilities
-	void MoveMinionToGraveyard(Minion * minion);
-
+	void MoveMinionToGraveyard(Minion* minion);
 	void RefreshHandRenderables();
 
 public:

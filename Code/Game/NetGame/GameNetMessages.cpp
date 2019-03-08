@@ -9,6 +9,7 @@
 #include "Game\Entity\Card.hpp"
 #include "Game\Definitions\DeckDefinition.hpp"
 #include "Game\NetGame\GameNetCommand.hpp"
+#include "Game\Actions\Action.hpp"
 #include "Engine\Net\NetSession.hpp"
 #include "Engine\Core\DevConsole.hpp"
 
@@ -33,7 +34,7 @@ void RegisterGameNetCommands()
 	uint16 id = GetNumRegisteredGameNetCommands();
 	RegisterGameNetCommand(id, GameNetCommandRegistration(ReceiveDeckDefinition, "receive_deck_def"));
 	RegisterGameNetCommand(id + 1, GameNetCommandRegistration(ReceiveReadyConfirmation, "receive_ready"));
-	RegisterGameNetCommand(id + 2, GameNetCommandRegistration(ReceiveInitialActivePlayer, "establish_initial_active_player"));
+	RegisterGameNetCommand(id + 2, GameNetCommandRegistration(ReceivePassTurn, "receive_pass_turn"));
 }
 
 //  =========================================================================================
@@ -129,7 +130,19 @@ bool ReceiveReadyConfirmation(GameNetCommand& cmd, NetConnection* fromConnection
 }
 
 //  =========================================================================================
-bool ReceiveInitialActivePlayer(GameNetCommand & cmd, NetConnection * fromConnection)
+bool ReceivePassTurn(GameNetCommand& cmd, NetConnection* fromConnection)
 {
-	return false;
+	Game* theGame = Game::GetInstance();
+
+	if(fromConnection == nullptr)
+		return false;
+
+	PlayingState* playingState = (PlayingState*)GameState::GetCurrentGameState();
+	if(playingState->GetType() != PLAYING_GAME_STATE)
+		return false;
+
+	//add end turn to action stack
+	std::map<std::string, std::string> parameters = { {"shouldSendToOpponent", "false"} };
+	
+	AddActionToRefereeQueue("end_turn", parameters);
 }

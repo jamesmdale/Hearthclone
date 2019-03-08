@@ -1,11 +1,10 @@
 #include "Game\Actions\Action.hpp"
 #include "Game\GameStates\PlayingState.hpp"
 #include "Game\Effects\Effect.hpp"
-#include "Engine\Core\StringUtils.hpp"
 #include "Game\Entity\Card.hpp"
 #include "Game\Entity\Player.hpp"
 #include "Game\Entity\Minion.hpp"
-#include "Engine\Input\InputSystem.hpp"
+#include "Game\NetGame\GameNetCommand.hpp"
 #include "Game\Effects\Effect.hpp"
 #include "Game\Effects\DerivedEffects\DrawEffect.hpp"
 #include "Game\Effects\DerivedEffects\ReorganizeHandEffect.hpp"
@@ -20,6 +19,8 @@
 #include "Game\Effects\DerivedEffects\CastTargetEffect.hpp"
 #include "Game\Effects\DerivedEffects\DamageEffect.hpp"
 #include "Game\Effects\DerivedEffects\VictoryEffect.hpp"
+#include "Engine\Input\InputSystem.hpp"
+#include "Engine\Core\StringUtils.hpp"
 
 // actions =============================================================================
 
@@ -320,15 +321,21 @@ void CastAction(const std::map<std::string, std::string>& parameters)
 //  =========================================================================================
 void EndTurnAction(const std::map<std::string, std::string>& parameters)
 {
-	UNUSED(parameters);
-
 	PlayingState* gameState = (PlayingState*)GameState::GetCurrentGameState();
-
-	TODO("Handle triggers");
-
 	gameState->m_turnStateManager->TransitionToState(END_OF_TURN_PLAY_STATE);
 
-	gameState = nullptr;
+	bool shouldSendToOpponent = ConvertStringToBool(parameters.find("shouldSendToOpponent")->second);
+
+	if (shouldSendToOpponent)
+	{
+		Command cmd = Command(g_sendGameCommand);
+
+		//construct command
+		uint16 netGameCmdId = GetNetGameCommandIdByName("receive_pass_turn");
+		cmd.AppendInt(netGameCmdId);
+
+		CommandRun(cmd);
+	}
 }
 
 //  =========================================================================================

@@ -124,6 +124,11 @@ void PlayingState::Render()
 
 	Game::GetInstance()->m_forwardRenderingPath2D->Render(m_renderScene2D);
 
+	//debug rendering
+	Vector2 mouseCoordinates = InputSystem::GetInstance()->GetMouse()->GetInvertedMouseClientPosition();
+	DebugRender::GetInstance()->CreateDebugText2D(Vector2(Window::GetInstance()->m_clientWidth - 300, Window::GetInstance()->m_clientHeight - 20), 20.f, 1.f, Stringf("%f, %f", mouseCoordinates.x, mouseCoordinates.y).c_str(), Rgba::WHITE, Rgba::WHITE, 0.f, ALWAYS_DEPTH_TYPE);
+	DebugRender::GetInstance()->CreateDebugText2D(Vector2(Window::GetInstance()->m_clientWidth - 300, Window::GetInstance()->m_clientHeight - 60), 20.f, 1.f, Stringf("RNG SYNC VAL: %i", Game::GetGlobalRNG()->GetPosition()).c_str(), Rgba::WHITE, Rgba::WHITE, 0.f, ALWAYS_DEPTH_TYPE);
+
 	theRenderer = nullptr;
 }
 
@@ -220,17 +225,12 @@ void PlayingState::SetupGameAsHost()
 	m_activePlayer->ShuffleDeck();
 	m_idlePlayer->ShuffleDeck();
 
-	//send turn order
-	/*Command turnOrderCommand = Command(g_sendGameCommand);
-	turnOrderCommand.AppendString("establish_initial_active_player");
-	turnOrderCommand.AppendBool(isHostFirstToAct);
-	CommandRun(turnOrderCommand);*/
-
 	CompleteMatchSetup();
 	m_currentMatchState = PLAYING_MATCH_STATE;
 
+	//dev console prints for debugging
 	m_activePlayer == m_player ? DevConsolePrintf("MY TURN") : DevConsolePrintf("ENEMY TURN");
-	DevConsolePrintf("RNG SYNC: %i", Game::GetGlobalRNG()->)
+	DevConsolePrintf("RNG SYNC: %i", Game::GetGlobalRNG()->GetPosition());
 }
 
 //  =========================================================================================
