@@ -126,7 +126,7 @@ void PlayingState::Render()
 
 	//debug rendering
 	Vector2 mouseCoordinates = InputSystem::GetInstance()->GetMouse()->GetInvertedMouseClientPosition();
-	DebugRender::GetInstance()->CreateDebugText2D(Vector2(Window::GetInstance()->m_clientWidth - 300, Window::GetInstance()->m_clientHeight - 20), 20.f, 1.f, Stringf("%f, %f", mouseCoordinates.x, mouseCoordinates.y).c_str(), Rgba::WHITE, Rgba::WHITE, 0.f, ALWAYS_DEPTH_TYPE);
+	DebugRender::GetInstance()->CreateDebugText2D(Vector2(Window::GetInstance()->m_clientWidth - 300, Window::GetInstance()->m_clientHeight - 20), 20.f, 1.f, Stringf("%i, %i", (int)mouseCoordinates.x, (int)mouseCoordinates.y).c_str(), Rgba::WHITE, Rgba::WHITE, 0.f, ALWAYS_DEPTH_TYPE);
 	DebugRender::GetInstance()->CreateDebugText2D(Vector2(Window::GetInstance()->m_clientWidth - 300, Window::GetInstance()->m_clientHeight - 60), 20.f, 1.f, Stringf("RNG SYNC VAL: %i", Game::GetGlobalRNG()->GetPosition()).c_str(), Rgba::WHITE, Rgba::WHITE, 0.f, ALWAYS_DEPTH_TYPE);
 
 	theRenderer = nullptr;

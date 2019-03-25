@@ -30,6 +30,8 @@
 #include "Engine\Net\NetSession.hpp"
 #include "Engine\Net\NetConnection.hpp"
 #include "Engine\Net\NetMessage.hpp"
+#include "Engine\Net\NetAddress.hpp"
+#include "Engine\Net\RemoteCommandService.hpp"
 #include "Engine\Math\RNG.hpp"
 #include <vector>
 #include <string>
@@ -101,6 +103,7 @@ void Game::Initialize()
 {
 	Window* theWindow = Window::GetInstance();
 	Renderer* theRenderer = Renderer::GetInstance();
+	NetSession* theNetSession = NetSession::GetInstance();
 
 	theRenderer->SetAmbientLightIntensity(0.15f);
 
@@ -157,9 +160,8 @@ void Game::Initialize()
 	m_netResendTimer = new Stopwatch(GetMasterClock());
 	m_netResendTimer->SetTimerInMilliseconds(100.f);
 
-	// cleanup
-	theRenderer = nullptr;
-	theWindow = nullptr;
+	//set default host/join addresses to be the local machine
+	m_hostAddress = GetLocalIPNoPort();
 }
 
 //  =========================================================================================
@@ -269,7 +271,7 @@ void LoadDeck(Command& cmd)
 }
 
 //  =============================================================================
-void ChangeHost(Command & cmd)
+void ChangeHost(Command& cmd)
 {
 	std::string address = cmd.GetNextString();
 	
