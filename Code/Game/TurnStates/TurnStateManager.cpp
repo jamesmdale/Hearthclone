@@ -18,18 +18,20 @@
 bool isFinishedTransitioningIn = true;
 bool isFinishedTransitioningOut = true;
 
-
+//  =========================================================================================
 TurnStateManager::TurnStateManager()
 {
 	m_currentState = NUM_PLAY_STATES;
 	TransitionToState(START_OF_GAME_PLAY_STATE);
 }
 
+//  =========================================================================================
 TurnStateManager::~TurnStateManager()
 {
 	m_playingState = nullptr;
 }
 
+//  =========================================================================================
 void TurnStateManager::Update(float deltaSeconds)
 {
 	UNUSED(deltaSeconds);
@@ -61,6 +63,7 @@ void TurnStateManager::Update(float deltaSeconds)
 	//}	
 }
 
+//  =========================================================================================
 float TurnStateManager::UpdateFromInput(float deltaSeconds)
 {
 	if (m_transitionState == NUM_PLAY_STATES)
@@ -88,7 +91,7 @@ float TurnStateManager::UpdateFromInput(float deltaSeconds)
 	return deltaSeconds;
 }
 
-
+//  =========================================================================================
 void TurnStateManager::TransitionToState(ePlayState toState)
 {
 	m_transitionState = toState;
@@ -96,6 +99,7 @@ void TurnStateManager::TransitionToState(ePlayState toState)
 	isFinishedTransitioningOut = false;
 }
 
+//  =========================================================================================
 void TurnStateManager::Transition()
 {
 	//if we are still transitioning out run the current state's transition out
@@ -156,9 +160,9 @@ void TurnStateManager::Transition()
 	}	
 }
 
+//  =========================================================================================
 void TurnStateManager::TransitionInStartOfGame()
 {
-	m_playingState->m_activePlayer = m_playingState->m_player;
 	int activePlayerStartingCards = g_startingCardsForActivePlayer;
 	int idlePlayerStartingCards = g_startingCardsForIdlePlayer;
 
@@ -177,10 +181,10 @@ void TurnStateManager::TransitionInStartOfGame()
 	TransitionToState(START_OF_TURN_PLAY_STATE);
 }
 
+//  =========================================================================================
 void TurnStateManager::TransitionInStartOfTurn()
-{
-	std::string player = "";
-	
+{	
+	//swap active player if not first turn
 	if (m_playingState->m_turnCount != 0)
 	{
 		//swap active player
@@ -231,11 +235,13 @@ void TurnStateManager::TransitionInStartOfTurn()
 	TransitionToState(MAIN_PLAY_STATE);
 }
 
+//  =========================================================================================
 void TurnStateManager::TransitionInMain()
 {
 	isFinishedTransitioningIn = true;
 }
 
+//  =========================================================================================
 void TurnStateManager::TransitionInEndOfTurn()
 {
 	isFinishedTransitioningIn = true;
@@ -245,6 +251,7 @@ void TurnStateManager::TransitionInEndOfTurn()
 	TransitionToState(START_OF_TURN_PLAY_STATE);
 }
 
+//  =========================================================================================
 void TurnStateManager::TransitionInEndOfGame()
 {
 	isFinishedTransitioningIn = true;
@@ -253,21 +260,25 @@ void TurnStateManager::TransitionInEndOfGame()
 // transition out =============================================================================
 #pragma region transition_out
 
+//  =========================================================================================
 void TurnStateManager::TransitionOutStartOfGame()
 {
 	isFinishedTransitioningOut = true;
 }
 
+//  =========================================================================================
 void TurnStateManager::TransitionOutStartOfTurn()
 {
 	isFinishedTransitioningOut = true;
 }
 
+//  =========================================================================================
 void TurnStateManager::TransitionOutMain()
 {
 	isFinishedTransitioningOut = true;
 }
 
+//  =========================================================================================
 void TurnStateManager::TransitionOutEndOfTurn()
 {
 	//update minion summoning sickness
@@ -279,6 +290,7 @@ void TurnStateManager::TransitionOutEndOfTurn()
 	isFinishedTransitioningOut = true;
 }
 
+//  =========================================================================================
 void TurnStateManager::TransitionOutEndOfGame()
 {
 	isFinishedTransitioningOut = true;
@@ -288,16 +300,19 @@ void TurnStateManager::TransitionOutEndOfGame()
 // update input  =============================================================================
 #pragma region Input
 
+//  =========================================================================================
 float TurnStateManager::UpdateInputStartOfGame(float deltaSeconds)
 {
 	return deltaSeconds;
 }
 
+//  =========================================================================================
 float TurnStateManager::UpdateInputStartOfTurn(float deltaSeconds)
 {
 	return deltaSeconds;
 }
 
+//  =========================================================================================
 float TurnStateManager::UpdateInputMain(float deltaSeconds)
 {
 	//if we aren't the active player don't update input.
@@ -386,11 +401,13 @@ float TurnStateManager::UpdateInputMain(float deltaSeconds)
 	return deltaSeconds;
 }
 
+//  =========================================================================================
 float TurnStateManager::UpdateInputEndOfTurn(float deltaSeconds)
 {
 	return deltaSeconds;
 }
 
+//  =========================================================================================
 float TurnStateManager::UpdateInputEndOfGame(float deltaSeconds)
 {
 	return deltaSeconds;

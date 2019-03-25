@@ -288,7 +288,6 @@ void Board::RefreshEndTurnWidget()
 		colorText = Rgba::BLACK;
 
 	//add mesh and material to renderable ========================================================================================
-
 	mb.CreateText2DInAABB2(Vector2::ZERO, m_endTurnWidget->m_dimensionsInPixels, 4.f / 3.f, "END TURN", Rgba::WHITE);	
 	Material* textInstance = Material::Clone(theRenderer->CreateOrGetMaterial("text"));
 	textInstance->SetProperty("TINT", Rgba::ConvertToVector4(colorText));

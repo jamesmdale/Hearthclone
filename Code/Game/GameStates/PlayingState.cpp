@@ -78,10 +78,7 @@ void PlayingState::Initialize()
 
 	SetupPlayers();
 
-	//if (m_isHosting)
-	//{
 	SetupGameAsHost();
-	//}
 }
 
 //  =============================================================================
@@ -128,6 +125,14 @@ void PlayingState::Render()
 	Vector2 mouseCoordinates = InputSystem::GetInstance()->GetMouse()->GetInvertedMouseClientPosition();
 	DebugRender::GetInstance()->CreateDebugText2D(Vector2(Window::GetInstance()->m_clientWidth - 300, Window::GetInstance()->m_clientHeight - 20), 20.f, 1.f, Stringf("%i, %i", (int)mouseCoordinates.x, (int)mouseCoordinates.y).c_str(), Rgba::WHITE, Rgba::WHITE, 0.f, ALWAYS_DEPTH_TYPE);
 	DebugRender::GetInstance()->CreateDebugText2D(Vector2(Window::GetInstance()->m_clientWidth - 300, Window::GetInstance()->m_clientHeight - 60), 20.f, 1.f, Stringf("RNG SYNC VAL: %i", Game::GetGlobalRNG()->GetPosition()).c_str(), Rgba::WHITE, Rgba::WHITE, 0.f, ALWAYS_DEPTH_TYPE);
+
+	std::string turnInfo = "";
+	if (m_activePlayer->m_playerId == SELF_PLAYER_TYPE)
+		turnInfo = "YOUR TURN";
+	else
+		turnInfo = "ENEMY TURN";
+
+	DebugRender::GetInstance()->CreateDebugText2D(Vector2(Window::GetInstance()->m_clientWidth - 300, Window::GetInstance()->m_clientHeight - 100), 20.f, 1.f, turnInfo.c_str(), Rgba::WHITE, Rgba::WHITE, 0.f, ALWAYS_DEPTH_TYPE);
 
 	theRenderer = nullptr;
 }
@@ -191,7 +196,6 @@ void PlayingState::UpdateFinishing(float deltaSeconds)
 void PlayingState::SetupGameAsHost()
 {
 	bool isHostFirstToAct = Game::GetGlobalRNG()->FlipCoin();
-	isHostFirstToAct ? m_activePlayer = m_player : m_activePlayer = m_enemyPlayer;
 
 	// This code garrauntees uniformity across the network so all of our following random generation order will be correct
 	//after assigning who is active first we can now just trust ACTIVEPLAYER and IDLEPLAYER to determine who can act
@@ -229,8 +233,8 @@ void PlayingState::SetupGameAsHost()
 	m_currentMatchState = PLAYING_MATCH_STATE;
 
 	//dev console prints for debugging
-	m_activePlayer == m_player ? DevConsolePrintf("MY TURN") : DevConsolePrintf("ENEMY TURN");
-	DevConsolePrintf("RNG SYNC: %i", Game::GetGlobalRNG()->GetPosition());
+	//m_activePlayer == m_player ? DevConsolePrintf("MY TURN") : DevConsolePrintf("ENEMY TURN");
+	//DevConsolePrintf("RNG SYNC: %i", Game::GetGlobalRNG()->GetPosition());
 }
 
 //  =========================================================================================
