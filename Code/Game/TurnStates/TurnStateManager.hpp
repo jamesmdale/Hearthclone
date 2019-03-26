@@ -22,6 +22,7 @@ public:
 	float UpdateFromInput(float deltaSeconds);
 	void TransitionToState(ePlayState toState);
 	void Transition();
+	inline bool IsTransitioning() { return m_transitionState != NUM_PLAY_STATES ? true : false; }
 
 /* ==========================================================================================================================================================================================	
 *		TRANSITION NOTES:

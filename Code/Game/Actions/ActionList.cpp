@@ -321,8 +321,14 @@ void CastAction(const std::map<std::string, std::string>& parameters)
 //  =========================================================================================
 void EndTurnAction(const std::map<std::string, std::string>& parameters)
 {
-	PlayingState* gameState = (PlayingState*)GameState::GetCurrentGameState();
-	gameState->m_turnStateManager->TransitionToState(END_OF_TURN_PLAY_STATE);
+	PlayingState* playingState = (PlayingState*)GameState::GetCurrentGameState();
+	if (playingState->GetType() != PLAYING_GAME_STATE)
+		return;
+
+	if (playingState->m_turnStateManager->IsTransitioning())
+		return;
+
+	playingState->m_turnStateManager->TransitionToState(END_OF_TURN_PLAY_STATE);
 
 	bool shouldSendToOpponent = ConvertStringToBool(parameters.find("shouldSendToOpponent")->second);
 

@@ -325,6 +325,7 @@
     <ClCompile Include="Entity\Minion.cpp" />
     <ClCompile Include="Effects\DerivedEffects\ReorganizeHandEffect.cpp" />
     <ClCompile Include="Effects\DerivedEffects\ReorganizeMinionsEffect.cpp" />
+    <ClCompile Include="NetGame\NetSyncObject.cpp" />
     <ClCompile Include="TheApp.cpp" />
     <ClCompile Include="Triggers\Trigger.cpp" />
     <ClCompile Include="Effects\DerivedEffects\TurnChangeEffect.cpp" />
@@ -365,6 +366,7 @@
     <ClInclude Include="Effects\DerivedEffects\ReorganizeHandEffect.hpp" />
     <ClInclude Include="Effects\DerivedEffects\ReorganizeMinionsEffect.hpp" />
     <ClInclude Include="Entity\HeroPower.hpp" />
+    <ClInclude Include="NetGame\NetSyncObject.hpp" />
     <ClInclude Include="SessionInfrastructure\NetSession.hpp" />
     <ClInclude Include="TheApp.hpp" />
     <ClInclude Include="Triggers\Trigger.hpp" />

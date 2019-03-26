@@ -124,6 +124,9 @@
     <ClCompile Include="NetGame\GameNetCommand.cpp">
       <Filter>General</Filter>
     </ClCompile>
+    <ClCompile Include="NetGame\NetSyncObject.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.hpp">
@@ -173,5 +176,6 @@
     <ClInclude Include="GameStates\ReadyState.hpp" />
     <ClInclude Include="NetGame\GameNetMessages.hpp" />
     <ClInclude Include="NetGame\GameNetCommand.hpp" />
+    <ClInclude Include="NetGame\NetSyncObject.hpp" />
   </ItemGroup>
 </Project>
