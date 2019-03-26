@@ -113,7 +113,7 @@ void Card::RefreshCardRenderables()
 	Material* materialInstance = nullptr;
 
 	PlayingState* gameState = (PlayingState*)g_currentState;
-	if (gameState->m_activePlayer->m_playerId != m_controller)
+	if (m_controller != SELF_PLAYER_TYPE)
 	{
 		mb.CreateQuad2D(Vector2::ZERO, m_dimensionsInPixels, Rgba::WHITE);
 		materialInstance = Material::Clone(theRenderer->CreateOrGetMaterial("default"));
